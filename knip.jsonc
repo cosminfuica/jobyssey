@@ -33,5 +33,6 @@
       "entry": ["index.{js,ts}"],
     },
   },
+  // dependency-cruiser fixtures: deliberate rule violations that tests/boundaries feeds to depcruise as data; nothing imports them
   "ignore": ["tests/boundaries/fixtures/**"],
 }

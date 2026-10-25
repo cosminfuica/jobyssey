@@ -461,6 +461,20 @@ const cases: [id: string, mutate: (root: string) => void, expected: Problem][] =
       },
     ],
     [
+      "CW17 (colocated *.test.ts outside tests/)",
+      (root) =>
+        put(
+          root,
+          "packages/alpha/lib/x.test.ts",
+          "export const level = process.env.LOG_LEVEL;\n"
+        ),
+      {
+        path: "packages/alpha/lib/x.test.ts:1",
+        message:
+          "reads process.env; only apps/api/src/main.ts and apps/api/src/dev.ts read the environment. Take the value as a parameter (it comes from loadConfig).",
+      },
+    ],
+    [
       "CW18",
       (root) => rmSync(join(root, "packages/alpha/README.md")),
       { path: "packages/alpha", message: "every package needs a README.md" },

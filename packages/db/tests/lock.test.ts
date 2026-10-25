@@ -9,7 +9,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { afterEach, expect, test } from "vitest";
+import { afterEach, expect, test, vi } from "vitest";
 import { acquireDataDirLock, DataDirLockedError } from "../index.ts";
 
 const dirs: string[] = [];
@@ -78,6 +78,37 @@ test("a lock left by a dead process is taken over", async () => {
   expect(readFileSync(join(dir, "jobyssey.lock"), "utf8")).toBe(
     String(process.pid)
   );
+});
+
+test("an EPERM from the liveness probe counts as live, so the lock is not taken over", () => {
+  const dir = tempDir();
+  const file = join(dir, "jobyssey.lock");
+  const owner = String(process.ppid);
+  writeFileSync(file, owner);
+  // A live process of another OS user answers kill(pid, 0) with EPERM; no test process can be one.
+  const kill = vi.spyOn(process, "kill").mockImplementation(() => {
+    throw Object.assign(new Error("kill EPERM"), { code: "EPERM" });
+  });
+  try {
+    expect(() => acquireDataDirLock(dir)).toThrow(
+      new DataDirLockedError(
+        `Another Jobyssey process (pid ${owner}) is using ${dir}. Stop it first.`
+      )
+    );
+  } finally {
+    kill.mockRestore();
+  }
+  expect(readFileSync(file, "utf8")).toBe(owner);
+});
+
+test("release leaves a lock file that names another PID", () => {
+  const dir = tempDir();
+  const file = join(dir, "jobyssey.lock");
+  const release = acquireDataDirLock(dir);
+  // Another process took the lock over after ours went stale.
+  writeFileSync(file, String(process.ppid));
+  release();
+  expect(readFileSync(file, "utf8")).toBe(String(process.ppid));
 });
 
 test("release removes the file and a second release is a no-op", () => {
