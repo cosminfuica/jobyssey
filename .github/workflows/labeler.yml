@@ -1,0 +1,21 @@
+# Adds area:* labels to pull requests from the paths they change
+# (.github/labeler.yml). pull_request_target gives fork pull requests a token
+# that can label; it is safe because nothing checks out or runs pull request
+# code: actions/labeler reads the changed file list from the API and its config
+# from the base branch.
+
+name: labeler
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v7

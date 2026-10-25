@@ -1,0 +1,26 @@
+# Path labels for pull requests, applied by .github/workflows/labeler.yml.
+"area:apps":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "apps/**"
+"area:packages":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "packages/**"
+"area:tooling":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "tooling/**"
+"area:scripts":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "scripts/**"
+"area:docs":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "docs/**"
+          - "*.md"
+"area:github":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
