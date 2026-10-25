@@ -20,6 +20,7 @@
     "test:root": "vitest run --config vitest.config.ts",
     "lint:boundaries": "depcruise --config .dependency-cruiser.cjs apps packages tooling",
     "check:workspace": "node scripts/check-workspace.ts",
+    "check:migrations": "node scripts/check-migrations.ts",
     "lint:files": "ls-lint",
     "lint:deps": "sherif",
     "lint:unused": "knip",
