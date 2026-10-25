@@ -1,0 +1,29 @@
+{
+  "name": "@jobyssey/api-shell",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./server": "./server.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hono/node-server": "catalog:",
+    "@jobyssey/accounts": "workspace:*",
+    "@jobyssey/auth": "workspace:*",
+    "@jobyssey/db": "workspace:*",
+    "hono": "catalog:",
+    "pino": "catalog:",
+    "pino-pretty": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*",
+    "@jobyssey/vitest-config": "workspace:*",
+    "vitest": "catalog:"
+  }
+}
