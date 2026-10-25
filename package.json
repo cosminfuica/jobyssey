@@ -25,6 +25,7 @@
     "lint:deps": "sherif",
     "lint:unused": "knip",
     "ui:add": "node scripts/shadcn-add.ts",
+    "gen:feature": "node scripts/gen-feature.ts",
     "check": "pnpm check:workspace && pnpm lint:files && pnpm lint:deps && turbo run typecheck lint && pnpm typecheck:root && pnpm lint:root && pnpm lint:boundaries && pnpm lint:unused && pnpm test && pnpm test:root"
   },
   "devDependencies": {
