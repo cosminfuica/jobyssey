@@ -1,0 +1,36 @@
+name: release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      # RELEASE_PLEASE_TOKEN is a fine-grained personal access token with
+      # contents + pull-requests read/write and an expiry of at most one year
+      # (record the date in docs/guides/releasing.md). A PAT is needed because
+      # pull requests opened with GITHUB_TOKEN trigger no checks, so the release
+      # PR would never get its CI run. While the secret is missing, the job skips
+      # with a notice instead of turning main red.
+      - id: token
+        env:
+          TOKEN: "${{ secrets.RELEASE_PLEASE_TOKEN }}"
+        run: |
+          if [ -n "$TOKEN" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::RELEASE_PLEASE_TOKEN is not set; skipping release"
+          fi
+      - if: steps.token.outputs.present == 'true'
+        uses: googleapis/release-please-action@v5
+        with:
+          token: "${{ secrets.RELEASE_PLEASE_TOKEN }}"
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
