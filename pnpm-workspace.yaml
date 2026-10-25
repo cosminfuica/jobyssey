@@ -5,6 +5,9 @@ packages:
 
 catalogMode: strict
 
+allowBuilds:
+  esbuild: true
+
 catalog:
   typescript: "~6.0.3"
   turbo: "^2.11.10"

@@ -9,8 +9,9 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { SHARED_TABLES } from "@jobyssey/db";
 import { afterEach, expect, test } from "vitest";
-import { checkWorkspace, type Problem } from "./check-workspace.ts";
+import { checkWorkspace, readPolicy, type Problem } from "./check-workspace.ts";
 
 const repo = join(import.meta.dirname, "..");
 // Real file I/O plus dynamic schema imports; generous so a loaded machine cannot fail it.
@@ -444,4 +445,8 @@ test.for(cases)(
 
 test("the real repository has no problems", { timeout: TIMEOUT }, async () => {
   expect(await checkWorkspace(repo)).toEqual([]);
+});
+
+test("sharedTables in workspace-policy.json equals SHARED_TABLES", () => {
+  expect(readPolicy(repo).sharedTables).toEqual([...SHARED_TABLES]);
 });
