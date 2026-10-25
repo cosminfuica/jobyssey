@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.turbo/
+coverage/
+*.tsbuildinfo
+.omo/
+.agents/
+.impeccable/
+skills-lock.json
+.env
+.env.*
+!.env.example
