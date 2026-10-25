@@ -1,4 +1,4 @@
-import type { WebFeature } from "@jobyssey/web-shell/client";
+import { coreHome, coreWebFeatures } from "@jobyssey/registry/client";
 
-// one entry per feature; the registry package supplies the core list (todo 16)
-export const webFeatures: readonly WebFeature[] = [];
+export const webFeatures = coreWebFeatures;
+export const home = coreHome;

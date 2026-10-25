@@ -9,6 +9,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@jobyssey/registry": "workspace:*",
     "@jobyssey/ui": "workspace:*",
     "@jobyssey/web-shell": "workspace:*",
     "react": "catalog:",

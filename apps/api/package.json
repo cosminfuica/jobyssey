@@ -1,0 +1,20 @@
+{
+  "name": "@jobyssey/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.ts",
+    "dev": "node --watch src/dev.ts",
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@jobyssey/api-shell": "workspace:*",
+    "@jobyssey/auth": "workspace:*",
+    "@jobyssey/db": "workspace:*",
+    "@jobyssey/registry": "workspace:*"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*"
+  }
+}

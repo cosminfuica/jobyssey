@@ -1,0 +1,22 @@
+{
+  "name": "@jobyssey/registry",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./server": "./server.ts",
+    "./client": "./client.tsx"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@jobyssey/api-shell": "workspace:*",
+    "@jobyssey/system": "workspace:*",
+    "@jobyssey/web-shell": "workspace:*"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*",
+    "@types/react": "catalog:"
+  }
+}

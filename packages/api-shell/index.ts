@@ -5,6 +5,7 @@ import type { Schema } from "hono/types";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import type { Logger as PinoLogger } from "pino";
 
+/** @public - for composition roots in other workspaces that pass config values */
 export type { Config } from "./lib/config.ts";
 
 export type FeatureEnv = { Variables: { accountId: AccountId } };
