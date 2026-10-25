@@ -27,9 +27,9 @@ While the secret is missing, the workflow skips the release step with a notice (
 
 ## Versions below 1.0
 
-The version stays `0.x` until the first stable release. In `release-please-config.json`, `bump-minor-pre-major` and `bump-patch-for-minor-pre-major` make breaking changes bump the minor version and features bump the patch version, so the first release is `0.0.1`.
+The version stays `0.x` until the first stable release. In `.github/release-please-config.json`, `bump-minor-pre-major` and `bump-patch-for-minor-pre-major` make breaking changes bump the minor version and features bump the patch version, so the first release is `0.0.1`.
 
-To jump to `0.1.0` or `1.0.0`, add `"release-as": "0.1.0"` (or `"1.0.0"`) to the `.` package in `release-please-config.json` once, merge it, and remove the line after that release.
+To jump to `0.1.0` or `1.0.0`, add `"release-as": "0.1.0"` (or `"1.0.0"`) to the `.` package in `.github/release-please-config.json` once, merge it, and remove the line after that release.
 
 ## Hotfixes
 

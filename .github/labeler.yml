@@ -20,6 +20,7 @@
       - any-glob-to-any-file:
           - "docs/**"
           - "*.md"
+          - ".github/*.md"
 "area:github":
   - changed-files:
       - any-glob-to-any-file:

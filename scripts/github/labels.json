@@ -87,7 +87,7 @@
   {
     "name": "area:docs",
     "color": "c5def5",
-    "description": "Changes under docs/ or any Markdown file at the root"
+    "description": "Changes under docs/ or any Markdown file at the root or directly in .github/"
   },
   {
     "name": "area:github",

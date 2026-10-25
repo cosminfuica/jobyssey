@@ -57,12 +57,12 @@ Why: reviewer time is the scarce resource. A contribution should be worth more t
 
 ## Contributor License Agreement
 
-On your first pull request, the CLA Assistant bot asks you to sign [CLA.md](CLA.md). You sign once, and it covers your later pull requests.
+On your first pull request, the CLA Assistant bot asks you to sign [CLA.md](.github/CLA.md). You sign once, and it covers your later pull requests.
 
 ## Code of conduct
 
-Everyone in the project follows the [Code of Conduct](CODE_OF_CONDUCT.md).
+Everyone in the project follows the [Code of Conduct](.github/CODE_OF_CONDUCT.md).
 
 ## Security
 
-Don't report vulnerabilities in public issues. Follow [SECURITY.md](SECURITY.md) instead.
+Don't report vulnerabilities in public issues. Follow [SECURITY.md](.github/SECURITY.md) instead.
