@@ -1,0 +1,29 @@
+{
+  "name": "@jobyssey/ui",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./globals.css": "./src/styles/globals.css",
+    "./lib/*": "./src/lib/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./hooks/*": "./src/hooks/*.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*",
+    "@types/react": "catalog:"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "catalog:",
+    "class-variance-authority": "catalog:",
+    "cn": "catalog:",
+    "radix-ui": "catalog:",
+    "react": "catalog:",
+    "shadcn": "catalog:",
+    "tailwindcss": "catalog:",
+    "tw-animate-css": "catalog:"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "extends": "@jobyssey/typescript-config/web.json",
+  "include": ["src", "vite.config.ts"],
+  "compilerOptions": {
+    "types": ["node", "vite/client"]
+  }
+}

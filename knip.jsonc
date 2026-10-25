@@ -21,12 +21,21 @@
     },
     "packages/ui": {
       "entry": ["src/components/*.tsx", "src/hooks/*.ts", "src/lib/*.ts"],
+      // imported from globals.css only, which knip does not read
+      "ignoreDependencies": [
+        "tailwindcss",
+        "tw-animate-css",
+        "shadcn",
+        "@fontsource-variable/geist",
+      ],
     },
     "apps/api": {
       "entry": ["src/main.ts", "src/dev.ts"],
     },
     "apps/web": {
       "entry": ["src/main.tsx", "vite.config.ts"],
+      // imported only as CSS
+      "ignoreDependencies": ["@jobyssey/ui"],
     },
     "tooling/*": {
       "entry": ["index.{js,ts}"],

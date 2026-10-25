@@ -1,0 +1,25 @@
+{
+  "name": "@jobyssey/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@jobyssey/ui": "workspace:*",
+    "@jobyssey/web-shell": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*",
+    "@tailwindcss/vite": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "vite": "catalog:"
+  }
+}

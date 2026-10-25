@@ -1,0 +1,26 @@
+{
+  "name": "@jobyssey/web-shell",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./client": "./client.tsx"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@jobyssey/ui": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-router": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*",
+    "@jobyssey/vitest-config": "workspace:*",
+    "@types/react": "catalog:",
+    "vitest": "catalog:"
+  }
+}
