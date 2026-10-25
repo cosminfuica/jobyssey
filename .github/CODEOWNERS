@@ -1,0 +1,18 @@
+# Every file has an owner. The explicit lines cover the files that define the
+# project's rules; they matter once a second maintainer joins.
+* @cosminfuica
+
+/.github/ @cosminfuica
+/scripts/ @cosminfuica
+/tooling/ @cosminfuica
+/.dependency-cruiser.cjs @cosminfuica
+/eslint.config.js @cosminfuica
+/commitlint*.config.ts @cosminfuica
+/knip.jsonc @cosminfuica
+/.ls-lint.yml @cosminfuica
+/workspace-policy.json @cosminfuica
+/pnpm-workspace.yaml @cosminfuica
+/packages/db/ @cosminfuica
+/docs/adr/ @cosminfuica
+/LICENSE @cosminfuica
+/CLA.md @cosminfuica
