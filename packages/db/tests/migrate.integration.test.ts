@@ -1,7 +1,14 @@
 import { randomBytes } from "node:crypto";
-import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import { sql } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import {
@@ -47,12 +54,27 @@ async function tables(db: Db): Promise<string[]> {
 
 describe.runIf(process.env.TEST_DB === "pglite")("PGlite", () => {
   let dataDir: string;
+  const dirs: string[] = [];
   beforeAll(() => {
     dataDir = mkdtempSync(join(tmpdir(), "jby-db-"));
   });
   afterAll(() => {
-    rmSync(dataDir, { recursive: true, force: true });
+    for (const dir of [dataDir, ...dirs])
+      rmSync(dir, { recursive: true, force: true });
   });
+
+  // A persisted folder migrated to v1 and closed, so the next open is not fresh.
+  async function migratedFolder(): Promise<string> {
+    const dir = mkdtempSync(join(tmpdir(), "jby-db-"));
+    dirs.push(dir);
+    const handle = await openDatabase({ dataDir: dir });
+    try {
+      await migrateDatabase(handle, { sets: [v1] });
+    } finally {
+      await handle.close();
+    }
+    return dir;
+  }
 
   test(
     "migrates a fresh folder, then snapshots before the next migrations",
@@ -120,6 +142,49 @@ describe.runIf(process.env.TEST_DB === "pglite")("PGlite", () => {
       expect(failed[0]).toBeInstanceOf(DataDirLockedError);
     }
   );
+
+  test(
+    "a snapshot prunes the older ones so the 5 newest remain",
+    { timeout: TIMEOUT },
+    async () => {
+      const dir = await migratedFolder();
+      const backups = join(dir, "backups");
+      mkdirSync(backups);
+      const old = [1, 2, 3, 4, 5, 6].map(
+        (day) => `pre-migrate-2000-01-0${day}T00-00-00.000Z.tar.gz`
+      );
+      for (const file of old) writeFileSync(join(backups, file), "");
+      const handle = await openDatabase({ dataDir: dir });
+      try {
+        const { snapshot } = await migrateDatabase(handle, { sets: [v2] });
+        expect(readdirSync(backups).sort()).toEqual([
+          ...old.slice(-4),
+          basename(snapshot ?? ""),
+        ]);
+      } finally {
+        await handle.close();
+      }
+    }
+  );
+
+  test(
+    "no snapshot is taken when no migration is pending",
+    { timeout: TIMEOUT },
+    async () => {
+      const dir = await migratedFolder();
+      const handle = await openDatabase({ dataDir: dir });
+      try {
+        expect(handle.fresh).toBe(false);
+        expect(await migrateDatabase(handle, { sets: [v1] })).toEqual({
+          applied: 0,
+          snapshot: undefined,
+        });
+        expect(existsSync(join(dir, "backups"))).toBe(false);
+      } finally {
+        await handle.close();
+      }
+    }
+  );
 });
 
 describe.runIf(process.env.TEST_DB === "postgres")("Postgres", () => {
@@ -157,6 +222,36 @@ describe.runIf(process.env.TEST_DB === "postgres")("Postgres", () => {
         expect(await count(a.db, "__drizzle_migrations_extra")).toBe(1);
       } finally {
         for (const handle of handles) await handle.close();
+      }
+    }
+  );
+
+  test(
+    "the migration advisory lock is released after migrating",
+    { timeout: TIMEOUT },
+    async () => {
+      // Its own database: advisory locks are per database, so a lock another test left cannot block this one.
+      const own = `${name}_unlock`;
+      await admin.db.execute(sql.raw(`CREATE DATABASE "${own}"`));
+      const parsed = new URL(url);
+      parsed.pathname = `/${own}`;
+      const handle = await openDatabase({
+        dataDir: "memory://",
+        databaseUrl: parsed.toString(),
+      });
+      try {
+        await migrateDatabase(handle, { sets: [v2, extra] });
+        // The lock is held by a session that goes back to the pool and stays connected, so a missing unlock shows here.
+        const [row] = await handle.db
+          .select({ n: sql<number>`count(*)::int` })
+          .from(sql`pg_locks`)
+          .where(
+            sql`locktype = 'advisory' and objid = 727001 and database = (select oid from pg_database where datname = current_database())`
+          );
+        expect(row?.n).toBe(0);
+      } finally {
+        await handle.close();
+        await admin.db.execute(sql.raw(`DROP DATABASE IF EXISTS "${own}"`));
       }
     }
   );

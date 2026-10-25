@@ -126,6 +126,27 @@ test("POST with a text/plain body is refused", async () => {
   expectNoCors(res);
 });
 
+test("POST with a chunked text/plain body and no Content-Length is refused", async () => {
+  const body = new ReadableStream<Uint8Array>({
+    start(controller) {
+      controller.enqueue(new TextEncoder().encode("hello"));
+      controller.close();
+    },
+  });
+  const res = await app.request("http://127.0.0.1:4180/api/probe/echo", {
+    method: "POST",
+    body,
+    duplex: "half",
+    headers: {
+      Host: HOST,
+      "Content-Type": "text/plain",
+      "Transfer-Encoding": "chunked",
+    },
+  });
+  expect(res.status).toBe(415);
+  expect(res.headers.get("content-type")).toBe("application/problem+json");
+});
+
 test("POST JSON from the same origin passes", async () => {
   const res = await postJson({
     "Sec-Fetch-Site": "same-origin",
