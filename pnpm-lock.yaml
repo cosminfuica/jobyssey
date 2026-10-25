@@ -206,6 +206,9 @@ catalogs:
     globals:
       specifier: ^17.13.0
       version: 17.13.0
+    hono:
+      specifier: ^4.13.13
+      version: 4.13.13
     husky:
       specifier: ^9.1.7
       version: 9.1.7
@@ -313,6 +316,28 @@ importers:
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.4(@electric-sql/pglite@0.5.11)(@types/pg@8.23.1)(pg@8.23.1)
+    devDependencies:
+      '@jobyssey/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+      '@jobyssey/vitest-config':
+        specifier: workspace:*
+        version: link:../../tooling/vitest-config
+      vitest:
+        specifier: 'catalog:'
+        version: 5.0.5(@types/node@26.6.5)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))
+
+  packages/auth:
+    dependencies:
+      '@jobyssey/accounts':
+        specifier: workspace:*
+        version: link:../accounts
+      '@jobyssey/db':
+        specifier: workspace:*
+        version: link:../db
+      hono:
+        specifier: 'catalog:'
+        version: 4.13.13
     devDependencies:
       '@jobyssey/typescript-config':
         specifier: workspace:*
@@ -2023,6 +2048,10 @@ packages:
 
   hermes-parser@0.25.1:
     resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
+
+  hono@4.13.13:
+    resolution: {integrity: sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA==}
+    engines: {node: '>=16.9.0'}
 
   hookified@1.15.1:
     resolution: {integrity: sha512-MvG/clsADq1GPM2KGo2nyfaWVyn9naPiXrqIe4jYjXNZQt238kWyOGrsyc/DmRAQ+Re6yeo6yX/yoNCG5KAEVg==}
@@ -4105,6 +4134,8 @@ snapshots:
   hermes-parser@0.25.1:
     dependencies:
       hermes-estree: 0.25.1
+
+  hono@4.13.13: {}
 
   hookified@1.15.1: {}
 

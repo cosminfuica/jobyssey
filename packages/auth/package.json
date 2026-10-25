@@ -1,0 +1,23 @@
+{
+  "name": "@jobyssey/auth",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@jobyssey/accounts": "workspace:*",
+    "@jobyssey/db": "workspace:*",
+    "hono": "catalog:"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*",
+    "@jobyssey/vitest-config": "workspace:*",
+    "vitest": "catalog:"
+  }
+}
