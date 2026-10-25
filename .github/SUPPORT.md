@@ -5,4 +5,4 @@
 - **Feature ideas:** use the feature form on the same page.
 - **Security issues:** follow [SECURITY.md](SECURITY.md). Never post them in public.
 
-There's no e-mail support.
+There is no e-mail support.
