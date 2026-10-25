@@ -11,6 +11,7 @@
       "project": ["**/*.{ts,tsx}"],
     },
     "packages/api-shell": {
+      // pino loads it by name (transport target "pino-pretty" in lib/logger.ts), which knip cannot see
       "ignoreDependencies": ["pino-pretty"],
     },
     "packages/registry": {
@@ -21,25 +22,16 @@
       // shadcn components are a kit: pnpm ui:add regenerates every export, used or not
       "includeEntryExports": false,
       "entry": ["src/components/*.tsx", "src/hooks/*.ts", "src/lib/*.ts"],
-      // imported from globals.css only, which knip does not read
-      "ignoreDependencies": [
-        "tailwindcss",
-        "tw-animate-css",
-        "shadcn",
-        "@fontsource-variable/geist",
-      ],
     },
     "apps/api": {
       "entry": ["src/main.ts", "src/dev.ts"],
     },
     "apps/web": {
       "entry": ["src/main.tsx"],
-      // imported only as CSS
-      "ignoreDependencies": ["@jobyssey/ui"],
     },
     "tooling/*": {
       "entry": ["index.{js,ts}"],
     },
   },
-  "ignore": ["**/tests/fixtures/**", "tests/boundaries/fixtures/**"],
+  "ignore": ["tests/boundaries/fixtures/**"],
 }

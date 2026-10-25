@@ -405,6 +405,48 @@ const cases: [id: string, mutate: (root: string) => void, expected: Problem][] =
       },
     ],
     [
+      "CW16 (nullable account_id)",
+      (root) =>
+        put(
+          root,
+          "packages/alpha/schema.ts",
+          [
+            'import { integer, pgTable, serial } from "drizzle-orm/pg-core";',
+            'import { accounts } from "../db/schema.ts";',
+            'export const notes = pgTable("alpha_notes", {',
+            "  id: serial().primaryKey(),",
+            '  account_id: integer("account_id").references(() => accounts.id),',
+            "});",
+            "",
+          ].join("\n")
+        ),
+      {
+        path: "packages/alpha/schema.ts",
+        message: 'table "alpha_notes": account_id must be NOT NULL (ADR 0013)',
+      },
+    ],
+    [
+      "CW16 (no foreign key)",
+      (root) =>
+        put(
+          root,
+          "packages/alpha/schema.ts",
+          [
+            'import { integer, pgTable, serial } from "drizzle-orm/pg-core";',
+            'export const notes = pgTable("alpha_notes", {',
+            "  id: serial().primaryKey(),",
+            '  account_id: integer("account_id").notNull(),',
+            "});",
+            "",
+          ].join("\n")
+        ),
+      {
+        path: "packages/alpha/schema.ts",
+        message:
+          'table "alpha_notes": account_id needs a foreign key to accounts(id) (ADR 0013)',
+      },
+    ],
+    [
       "CW17",
       (root) =>
         put(

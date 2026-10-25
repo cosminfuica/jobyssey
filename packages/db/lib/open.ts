@@ -37,9 +37,12 @@ function register(handle: DatabaseHandle, client: Client): DatabaseHandle {
 export async function openDatabase(options: {
   dataDir: string;
   databaseUrl?: string;
+  // Called when an idle Postgres client fails (server restart); without a listener the pool's "error" event crashes the process.
+  onError?: (error: Error) => void;
 }): Promise<DatabaseHandle> {
   if (options.databaseUrl !== undefined) {
     const pool = new Pool({ connectionString: options.databaseUrl });
+    if (options.onError !== undefined) pool.on("error", options.onError);
     const db = drizzlePg({ client: pool });
     return register(
       { db, driver: "postgres", fresh: false, close: () => pool.end() },

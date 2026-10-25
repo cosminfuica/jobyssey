@@ -21,10 +21,11 @@ export function createApp(options: {
 }): Hono {
   const { allowedHosts, auth, features, logger, webDist } = options;
   const app = new Hono();
+  // First, so the guards' 403 and 415 refusals are logged too.
+  app.use("*", requestLog(logger));
   app.use("*", hostGuard(allowedHosts));
   app.use("*", crossSiteGuard(allowedHosts));
   app.use("/api/*", jsonBodyOnly());
-  app.use("*", requestLog(logger));
   // Registered before the account middleware, so login callbacks run without an account.
   if (auth.routes !== undefined) app.route("/api/auth", auth.routes);
 

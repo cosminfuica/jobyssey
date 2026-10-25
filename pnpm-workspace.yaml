@@ -5,6 +5,7 @@ packages:
 
 catalogMode: strict
 
+# esbuild's install script fetches its native binary (pulled in by drizzle-kit, tsx and vite); added when pnpm install failed with ERR_PNPM_IGNORED_BUILDS
 allowBuilds:
   esbuild: true
 
