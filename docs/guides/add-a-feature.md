@@ -45,5 +45,5 @@ git commit -m "feat(<name>): ..."
 
 1. Delete `packages/<name>`.
 2. Remove its four lines from `packages/registry`: the import and the entry in `server.ts`, the import and the entry in `client.tsx`.
-3. Remove `"@jobyssey/<name>"` from `packages/registry/package.json`.
+3. Remove the `"@jobyssey/<name>"` line from `packages/registry/package.json`. When it was the last entry in `dependencies`, also remove the trailing comma on the line above.
 4. Run `pnpm install`, then `pnpm check`.

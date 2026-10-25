@@ -95,3 +95,26 @@ test(
     expect(await findUnscopedTables(handle.db)).toEqual(["zz_unscoped"]);
   }
 );
+
+// toContain: tables from the tests above persist in the shared handle.
+test(
+  "a table with a nullable account_id is reported",
+  { timeout: TIMEOUT },
+  async () => {
+    await handle.db.execute(
+      sql`CREATE TABLE zz_nullable (account_id uuid REFERENCES accounts(id))`
+    );
+    expect(await findUnscopedTables(handle.db)).toContain("zz_nullable");
+  }
+);
+
+test(
+  "a table whose account_id has no foreign key is reported",
+  { timeout: TIMEOUT },
+  async () => {
+    await handle.db.execute(
+      sql`CREATE TABLE zz_no_fk (account_id uuid NOT NULL)`
+    );
+    expect(await findUnscopedTables(handle.db)).toContain("zz_no_fk");
+  }
+);

@@ -54,6 +54,28 @@ test("a foreign Host is refused", async () => {
   expectNoCors(res);
 });
 
+test("a refused request is logged", async () => {
+  const lines: string[] = [];
+  const logged = createApp({
+    allowedHosts: new Set([HOST]),
+    auth,
+    features: [probe],
+    logger: pino({ level: "info" }, { write: (line) => lines.push(line) }),
+  });
+  const res = await logged.request("http://127.0.0.1:4180/api/probe/whoami", {
+    headers: { Host: "evil.example:4180" },
+  });
+  expect(res.status).toBe(403);
+  expect(lines.map((line) => JSON.parse(line) as unknown)).toContainEqual(
+    expect.objectContaining({
+      msg: "request",
+      method: "GET",
+      path: "/api/probe/whoami",
+      status: 403,
+    })
+  );
+});
+
 test("a request without Host is refused", async () => {
   const res = await app.request("http://127.0.0.1:4180/api/probe/whoami");
   expect(res.status).toBe(403);

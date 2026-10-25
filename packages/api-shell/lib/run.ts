@@ -58,6 +58,7 @@ export async function runApi(options: RunApiOptions): Promise<RunningApi> {
   const handle = await openDatabase({
     dataDir: config.JOBYSSEY_DATA_DIR,
     databaseUrl: config.DATABASE_URL,
+    onError: (err) => logger.error({ err }, "database pool error"),
   });
   let server: ServerType;
   let port: number;
