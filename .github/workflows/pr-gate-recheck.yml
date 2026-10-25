@@ -1,0 +1,53 @@
+# When a maintainer accepts an issue (ready-for-agent or ready-for-human), re-run
+# the latest pr-gate run of every open pull request that closes it, so the
+# linked-issue check turns green without a new push. No pull request code runs.
+
+name: pr-gate-recheck
+
+on:
+  issues:
+    types: [labeled]
+
+permissions: {}
+
+jobs:
+  recheck:
+    if: contains(fromJSON('["ready-for-agent", "ready-for-human"]'), github.event.label.name)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      pull-requests: read
+      issues: read
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            const { repository } = await github.graphql(
+              `query ($owner: String!, $name: String!, $number: Int!) {
+                repository(owner: $owner, name: $name) {
+                  issue(number: $number) {
+                    closedByPullRequestsReferences(first: 10, includeClosedPrs: false) {
+                      nodes { headRefOid number }
+                    }
+                  }
+                }
+              }`,
+              { owner: context.repo.owner, name: context.repo.repo, number: context.payload.issue.number }
+            );
+            for (const pr of repository.issue.closedByPullRequestsReferences.nodes) {
+              const { data } = await github.rest.actions.listWorkflowRuns({
+                ...context.repo,
+                workflow_id: "pr-gate.yml",
+                head_sha: pr.headRefOid,
+                per_page: 1,
+              });
+              const run = data.workflow_runs[0];
+              if (!run) {
+                core.info(`#${pr.number}: no pr-gate run yet`);
+              } else if (run.status !== "completed") {
+                core.info(`#${pr.number}: pr-gate run ${run.id} is still ${run.status}`);
+              } else {
+                await github.rest.actions.reRunWorkflow({ ...context.repo, run_id: run.id });
+                core.info(`#${pr.number}: re-ran pr-gate run ${run.id}`);
+              }
+            }

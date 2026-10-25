@@ -1,0 +1,42 @@
+# Greets first-time contributors with the contribution rules. Runs no
+# repository code, so pull_request_target is safe.
+
+name: welcome
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions: {}
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/first-interaction@v3
+        with:
+          issue_message: |
+            Thanks for opening your first issue. Work starts only after a maintainer labels this issue `ready-for-agent` or `ready-for-human`; please wait for that label before you open a pull request.
+
+            When you do open one, the `pr-gate` check posts one comment listing anything missing. It needs:
+
+            1. `Closes: #<issue>` pointing to an issue labelled `ready-for-agent` or `ready-for-human`.
+            2. Every template section in your own words; How I tested names the commands you ran.
+            3. One AI assistance box checked, plus `Assisted-by: <tool> (<model>)` if you used AI.
+            4. At most 300 changed lines in a first contribution.
+
+            Run `pnpm check` before pushing. Pull requests whose gate stays red for 7 days close automatically.
+          pr_message: |
+            Thanks for your first pull request. The `pr-gate` check posts one comment listing anything missing. It needs:
+
+            1. `Closes: #<issue>` pointing to an issue labelled `ready-for-agent` or `ready-for-human`.
+            2. Every template section in your own words; How I tested names the commands you ran.
+            3. One AI assistance box checked, plus `Assisted-by: <tool> (<model>)` if you used AI.
+            4. At most 300 changed lines in a first contribution.
+
+            Run `pnpm check` before pushing. Pull requests whose gate stays red for 7 days close automatically. See docs/guides/pull-requests.md.

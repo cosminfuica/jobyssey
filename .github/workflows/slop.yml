@@ -1,0 +1,39 @@
+# A maintainer labels a low-effort pull request `slop`; this posts the canned
+# reply from the AI policy in CONTRIBUTING.md and closes it. Runs no repository
+# code, so pull_request_target is safe.
+
+name: slop
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+permissions: {}
+
+jobs:
+  close:
+    if: github.event.label.name == 'slop'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            const body = [
+              "A maintainer closed this pull request as low effort (`slop`).",
+              "",
+              "What was missing: the project accepts AI-assisted work only when the author understands every changed line and has run the change. Reviewer time is the scarce resource, and this pull request did not show that work.",
+              "",
+              "How to resubmit:",
+              "1. Start from an issue a maintainer has labelled `ready-for-agent` or `ready-for-human`.",
+              "2. Write every template section in your own words, including the commands you ran in How I tested.",
+              "3. Run `pnpm check` and the change itself (in the browser or with curl) before pushing.",
+              "4. Check one AI assistance box and add `Assisted-by: <tool> (<model>)` if you used AI.",
+              "",
+              "Do not let an agent open pull requests on its own. Repeated slop leads to a block. See the AI policy in CONTRIBUTING.md.",
+            ].join("\n");
+            const issue_number = context.payload.pull_request.number;
+            await github.rest.issues.createComment({ ...context.repo, issue_number, body });
+            await github.rest.pulls.update({ ...context.repo, pull_number: issue_number, state: "closed" });
