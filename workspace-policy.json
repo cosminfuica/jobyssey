@@ -1,0 +1,10 @@
+{
+  "platform": ["db", "accounts", "auth", "api-shell", "web-shell", "ui"],
+  "registries": ["packages/registry"],
+  "nodeApps": ["api"],
+  "webApps": ["web"],
+  "subpathExports": ["ui"],
+  "envReaders": ["apps/api/src/main.ts", "apps/api/src/dev.ts"],
+  "sharedTables": ["accounts"],
+  "drizzleConfigs": ["packages/db/drizzle.config.ts"]
+}

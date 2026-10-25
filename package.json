@@ -16,7 +16,8 @@
     "test": "turbo run test",
     "typecheck:root": "tsc -p tsconfig.json",
     "lint:root": "eslint --max-warnings 0 --no-error-on-unmatched-pattern scripts tests tooling eslint.config.js vitest.config.ts",
-    "test:root": "vitest run --config vitest.config.ts"
+    "test:root": "vitest run --config vitest.config.ts",
+    "lint:boundaries": "depcruise --config .dependency-cruiser.cjs apps packages tooling"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
@@ -25,6 +26,7 @@
     "@jobyssey/eslint-config": "workspace:*",
     "@jobyssey/typescript-config": "workspace:*",
     "@types/node": "catalog:",
+    "dependency-cruiser": "catalog:",
     "eslint": "catalog:",
     "husky": "catalog:",
     "lint-staged": "catalog:",
