@@ -1,10 +1,12 @@
 # @jobyssey/api-shell
 
+## Purpose
+
 The HTTP server every Jobyssey API runs in: settings, the security guards,
 problem+json errors, request logs, feature mounting and startup (public ADRs
 0005, 0007, 0009).
 
-## Exports
+## Entry points
 
 `index.ts` (what features import):
 
@@ -58,7 +60,11 @@ Jobyssey has no login, so a `HOST` other than `127.0.0.1`, `::1` or
   415, so HTML forms cannot post to the API.
 - No CORS headers are ever sent.
 
-## Feature names
+## Rules
+
+- This package never reads `process.env` (check-workspace CW17); the composition root passes `env`.
+
+### Feature names
 
 Names are unique and `auth` is reserved: the login adapter's `routes` are
 mounted at `/api/auth`, before the middleware that resolves the account.

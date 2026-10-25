@@ -1,9 +1,13 @@
 # @jobyssey/db
 
+## Purpose
+
 Database access for every server-side package: opens PGlite (an embedded
 Postgres in a data folder) or a Postgres server, and runs migrations.
 
-## Exports (`index.ts`)
+## Entry points
+
+`index.ts`:
 
 - `openDatabase({ dataDir, databaseUrl? })` returns a `DatabaseHandle`
   (`db`, `driver`, `dataDir`, `fresh`, `close()`). With `databaseUrl` it
@@ -37,7 +41,12 @@ Before applying pending migrations to an existing PGlite folder,
 keeps the newest 5. On Postgres it holds an advisory lock, so two servers
 starting together migrate one after the other.
 
-## Adding a table
+## Rules
+
+- Tables live in each package's `schema.ts`, never here (check-workspace CW15); per-account tables need `account_id` (CW16).
+- Migrations stay in order and mark destructive statements (`pnpm check:migrations`).
+
+### Adding a table
 
 1. Edit the owning package's `schema.ts` (per-account tables need
    `account_id NOT NULL REFERENCES accounts(id)`).

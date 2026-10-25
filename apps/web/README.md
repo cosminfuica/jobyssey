@@ -17,7 +17,8 @@ None: apps are not imported.
 ## Rules
 
 - No feature code here: features live in packages and are listed in
-  `src/features.tsx`.
+  `@jobyssey/registry` (`client.tsx`); `src/features.tsx` only re-exports
+  that list.
 - `pnpm --filter @jobyssey/web dev` serves on port 5173 and proxies `/api`
   to the API on 127.0.0.1:4180; `build` writes `dist/`.
 - A new folder whose files use Tailwind classes needs an `@source` line in

@@ -1,9 +1,11 @@
 # @jobyssey/web-shell
 
+## Purpose
+
 The frame every Jobyssey web app renders: the header, the providers and a
 router built from a list of features (public ADR 0003, 0005).
 
-## Exports
+## Entry points
 
 `client.tsx` (`@jobyssey/web-shell/client`; this package has no Node entry):
 
@@ -16,7 +18,11 @@ router built from a list of features (public ADR 0003, 0005).
   "Jobyssey is running" card, or redirects to `home` when it is set.
 - `AppProviders({ router })`: the TanStack Query client and the router.
 
-## Trade-off
+## Rules
+
+- Browser code only: dependency-cruiser `node-code-no-tsx-or-react` keeps Node code from importing it, and `client-code-no-node-values` keeps it from importing Node values.
+
+### Trade-off
 
 Feature routes arrive as a list of `AnyRoute`, so `<Link to>` is checked as
 a string, not against the route tree. Each feature takes its route paths from

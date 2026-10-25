@@ -1,9 +1,11 @@
 # @jobyssey/ui
 
+## Purpose
+
 The UI kit: shadcn/ui components (style `radix-nova`) and the theme tokens
 every web app imports (public ADR 0003).
 
-## Exports
+## Entry points
 
 - `@jobyssey/ui/globals.css`: Tailwind, the theme tokens (`:root` and
   `.dark`) and the base layer. It has no `@source` lines: each app's
