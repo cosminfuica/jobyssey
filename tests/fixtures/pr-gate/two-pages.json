@@ -1,0 +1,112 @@
+[
+  {
+    "data": {
+      "repository": {
+        "pullRequest": {
+          "body": "## Problem\n\nThe health endpoint returns 500 when the database is down, so the start script cannot tell a slow boot from a crash.\n\n## Approach\n\nReturn 503 with a reason instead; a retry loop in the caller was rejected because it hides the failure.\n\n## How I tested\n\nRan `pnpm check` and `curl -i localhost:3000/api/system/health` with Postgres stopped: 503.\n\n## AI assistance\n\n- [x] No AI tools were used.\n- [ ] AI tools were used. I reviewed every changed line and added an `Assisted-by:` line below.\n\n## Linked issue\n\nCloses: #12\n",
+          "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+          "author": {
+            "__typename": "User",
+            "login": "contributor"
+          },
+          "headRefName": "fix-health",
+          "additions": 600,
+          "deletions": 10,
+          "labels": {
+            "nodes": []
+          },
+          "files": {
+            "nodes": [
+              {
+                "path": "packages/zz-alpha/package.json",
+                "additions": 20,
+                "deletions": 0,
+                "changeType": "ADDED"
+              },
+              {
+                "path": "packages/system/server.ts",
+                "additions": 80,
+                "deletions": 10,
+                "changeType": "MODIFIED"
+              }
+            ],
+            "pageInfo": {
+              "hasNextPage": true,
+              "endCursor": "cursor-1"
+            }
+          },
+          "closingIssuesReferences": {
+            "nodes": [
+              {
+                "number": 12,
+                "state": "OPEN",
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "ready-for-agent"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "data": {
+      "repository": {
+        "pullRequest": {
+          "body": "## Problem\n\nThe health endpoint returns 500 when the database is down, so the start script cannot tell a slow boot from a crash.\n\n## Approach\n\nReturn 503 with a reason instead; a retry loop in the caller was rejected because it hides the failure.\n\n## How I tested\n\nRan `pnpm check` and `curl -i localhost:3000/api/system/health` with Postgres stopped: 503.\n\n## AI assistance\n\n- [x] No AI tools were used.\n- [ ] AI tools were used. I reviewed every changed line and added an `Assisted-by:` line below.\n\n## Linked issue\n\nCloses: #12\n",
+          "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
+          "author": {
+            "__typename": "User",
+            "login": "contributor"
+          },
+          "headRefName": "fix-health",
+          "additions": 600,
+          "deletions": 10,
+          "labels": {
+            "nodes": []
+          },
+          "files": {
+            "nodes": [
+              {
+                "path": "pnpm-lock.yaml",
+                "additions": 500,
+                "deletions": 0,
+                "changeType": "MODIFIED"
+              },
+              {
+                "path": "tooling/zz-beta/package.json",
+                "additions": 0,
+                "deletions": 0,
+                "changeType": "ADDED"
+              }
+            ],
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": "cursor-2"
+            }
+          },
+          "closingIssuesReferences": {
+            "nodes": [
+              {
+                "number": 12,
+                "state": "OPEN",
+                "labels": {
+                  "nodes": [
+                    {
+                      "name": "ready-for-agent"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+]

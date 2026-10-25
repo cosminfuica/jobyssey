@@ -1,0 +1,39 @@
+[
+  {
+    "data": {
+      "repository": {
+        "pullRequest": {
+          "body": "Release notes for 0.2.0.",
+          "authorAssociation": "OWNER",
+          "author": {
+            "__typename": "User",
+            "login": "cosminfuica"
+          },
+          "headRefName": "release-please--branches--main",
+          "additions": 12,
+          "deletions": 3,
+          "labels": {
+            "nodes": []
+          },
+          "files": {
+            "nodes": [
+              {
+                "path": "CHANGELOG.md",
+                "additions": 12,
+                "deletions": 3,
+                "changeType": "MODIFIED"
+              }
+            ],
+            "pageInfo": {
+              "hasNextPage": false,
+              "endCursor": null
+            }
+          },
+          "closingIssuesReferences": {
+            "nodes": []
+          }
+        }
+      }
+    }
+  }
+]

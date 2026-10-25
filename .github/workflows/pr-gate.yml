@@ -1,0 +1,103 @@
+# Gate for every pull request: commitlint on the squash message (title +
+# description), the template sections, the AI-assistance disclosure, an accepted
+# linked issue for outside contributors, the first-contribution size cap and the
+# size/* label. It posts one sticky comment listing what to fix.
+#
+# Why pull_request_target is safe here: the event runs with a write token, so
+# the job checks out the BASE branch only (the checkout default on this event,
+# no ref input, persist-credentials: false) and never runs code from the pull
+# request. It reads the pull request through the API, and the title and body
+# reach the shell only through env variables, never through ${{ }} inside a
+# run: script. A pull request that edits this file or scripts/pr-gate.ts cannot
+# change its own gate run.
+#
+# The job always reports (no job-level if): `pr-gate` is a required check, and a
+# required check that never reports blocks merging. Exempt pull requests (bot
+# authors such as Renovate, and release-please--* branches opened by a
+# maintainer's token) get exempt=true from the script, the later steps skip and
+# the job ends green.
+#
+# No labeled/unlabeled triggers: a maintainer adding size-ok re-runs the job by
+# hand, and pr-gate-recheck.yml re-runs it when the linked issue is accepted.
+
+name: pr-gate
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+
+permissions: {}
+
+concurrency:
+  group: "pr-gate-${{ github.event.pull_request.number }}"
+  cancel-in-progress: true
+
+jobs:
+  pr-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: pnpm install --frozen-lockfile
+      - id: gate
+        name: Check description, linked issue and size
+        env:
+          GITHUB_TOKEN: "${{ github.token }}"
+          PR_NUMBER: "${{ github.event.pull_request.number }}"
+        run: node scripts/pr-gate.ts
+      - id: commitlint
+        name: Lint the squash commit (title + description)
+        if: steps.gate.outputs.exempt != 'true'
+        continue-on-error: true
+        env:
+          PR_TITLE: "${{ github.event.pull_request.title }}"
+          PR_BODY: "${{ github.event.pull_request.body }}"
+          COMMITLINT_EXTRA_SCOPES: "${{ steps.gate.outputs.new_scopes }}"
+          COMMITLINT_REQUIRE_ISSUE: "${{ steps.gate.outputs.is_maintainer != 'true' && '1' || '0' }}"
+        run: printf '%s\n\n%s\n' "$PR_TITLE" "$PR_BODY" | tr -d '\r' | pnpm exec commitlint --config commitlint.pr.config.ts
+      - name: Post one sticky comment and set labels
+        if: always() && steps.gate.outcome == 'success' && steps.gate.outputs.exempt != 'true'
+        uses: actions/github-script@v9
+        env:
+          PROBLEMS: "${{ steps.gate.outputs.problems }}"
+          SIZE_LABEL: "${{ steps.gate.outputs.size_label }}"
+          COMMITLINT: "${{ steps.commitlint.outcome }}"
+        with:
+          script: |
+            const marker = "<!-- pr-gate -->";
+            const problems = JSON.parse(process.env.PROBLEMS);
+            if (process.env.COMMITLINT !== "success")
+              problems.push(
+                "The title and description fail commitlint (see the `Lint the squash commit` step log). Title: `type(scope): subject`, scope = a workspace folder or repo, deps, docs, github, release. Contributors end the description with `Closes: #<issue>`."
+              );
+            const issue_number = context.payload.pull_request.number;
+            const body = problems.length
+              ? `${marker}\n### PR gate: ${problems.length} item(s) to fix\n\n${problems.map((p, i) => `${i + 1}. ${p}`).join("\n")}\n\nEdit the description or push a commit and the gate runs again. See docs/guides/pull-requests.md.`
+              : `${marker}\n### PR gate: passed`;
+            const comments = await github.paginate(github.rest.issues.listComments, { ...context.repo, issue_number });
+            const mine = comments.find((c) => c.user?.login === "github-actions[bot]" && c.body?.startsWith(marker));
+            if (mine) await github.rest.issues.updateComment({ ...context.repo, comment_id: mine.id, body });
+            else if (problems.length) await github.rest.issues.createComment({ ...context.repo, issue_number, body });
+            const remove = async (name) => {
+              try {
+                await github.rest.issues.removeLabel({ ...context.repo, issue_number, name });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+              }
+            };
+            const current = context.payload.pull_request.labels.map((l) => l.name);
+            for (const name of current.filter((n) => n.startsWith("size/") && n !== process.env.SIZE_LABEL)) await remove(name);
+            await github.rest.issues.addLabels({ ...context.repo, issue_number, labels: [process.env.SIZE_LABEL, ...(problems.length ? ["gate-failed"] : [])] });
+            if (!problems.length) await remove("gate-failed");
+      - name: Fail when anything is wrong
+        if: steps.gate.outputs.exempt != 'true' && (steps.gate.outputs.problems != '[]' || steps.commitlint.outcome != 'success')
+        run: exit 1

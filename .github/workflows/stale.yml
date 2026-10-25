@@ -1,0 +1,40 @@
+# Closes only two kinds of items: pull requests whose gate stays red
+# (gate-failed: stale after 3 days, closed 4 days later) and issues waiting on
+# the reporter (needs-info: stale after 14 days, closed 7 days later).
+# Everything else is never marked stale.
+
+name: stale
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+
+permissions: {}
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Close pull requests with a red gate
+        uses: actions/stale@v11
+        with:
+          only-pr-labels: gate-failed
+          days-before-pr-stale: 3
+          days-before-pr-close: 4
+          days-before-issue-stale: -1
+          days-before-issue-close: -1
+          stale-pr-message: "The `pr-gate` check has been red for 3 days. This pull request closes in 4 days unless the gate passes; its comment lists what to fix."
+          close-pr-message: "Closed because the `pr-gate` check stayed red for 7 days. Fix the items in the gate comment and reopen, or open a new pull request."
+      - name: Close issues waiting on information
+        uses: actions/stale@v11
+        with:
+          only-issue-labels: needs-info
+          days-before-issue-stale: 14
+          days-before-issue-close: 7
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          stale-issue-message: "This issue has waited 14 days for the information a maintainer asked for. It closes in 7 days unless someone replies."
+          close-issue-message: "Closed because the requested information did not arrive. Comment with it and a maintainer can reopen the issue."
