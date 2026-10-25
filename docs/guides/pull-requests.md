@@ -10,16 +10,25 @@
 6. **Review.** A maintainer reviews once the gate and CI are green.
 7. **Squash.** The pull request is squash-merged: the title becomes the commit header and the description becomes the commit body (see [commits.md](commits.md)).
 
+## Writing the description
+
+Keep the prose short; use the words from `GLOSSARY.md`.
+
+- **Summary**: what was wrong and for whom in a sentence or two, then the smallest view that shows the change. Use a `diff` sketch for a change to a shape that already exists, a shallow file tree for a layout change or refactor, a call tree for control flow, pseudocode for logic and a Mermaid diagram for data flow between parts. Name one alternative you rejected.
+- **Evidence**: the change working, before and after: the commands you ran, in backticks, with what they printed, ideally a test that fails before the change and passes after it. Add a screenshot for a visual change; the gate still needs at least one command.
+- **Merge danger**: `Door:` is two-way when reverting the pull request undoes it, one-way when it does not (data loss, a destructive migration, a published API or file format). `Blast radius:` is one word for what could break, such as `docs`, `ci`, `web`, `api` or `data`, optionally followed by a sentence.
+
 ## What the gate checks
 
 The gate runs from the base branch (`.github/workflows/pr-gate.yml`, logic in `scripts/lib/pr-gate.ts`) and never runs code from the pull request. Pull requests from bots and release-please branches are exempt. Maintainers (owner, members, collaborators) skip the AI assistance section and the linked-issue check, and may write `none` under Linked issue.
 
 | Message                                                                         | How to fix it                                                                                                                                                                                                            |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Section "## X" is missing.                                                      | Restore the heading from the template, spelled exactly, as a `##` heading.                                                                                                                                               |
+| Section "## X" is missing.                                                      | Restore the heading from the template as a `##` heading. Its words must match the template; upper or lower case does not matter.                                                                                         |
 | Section "## X" still holds the template prompt.                                 | Delete the `_Replace this line:` line and write the section yourself.                                                                                                                                                    |
 | Section "## X" is empty or holds only filler.                                   | Write real content; `n/a`, `none`, `tbd`, `todo` and dashes do not count.                                                                                                                                                |
-| Section "## How I tested" names no command.                                     | Put each command you ran in backticks, for example `pnpm check`, or in a fenced code block.                                                                                                                              |
+| Section "## Evidence" names no command.                                         | Put each command you ran in backticks, for example `pnpm check`, or in a fenced code block.                                                                                                                              |
+| Section "## Merge danger" needs a "Door:" line and a "Blast radius:" line.      | Write `Door: one-way` or `Door: two-way` and `Blast radius:` followed by a word. Bold labels and list markers are fine; lines inside code blocks do not count.                                                           |
 | Section "## AI assistance": check exactly one box.                              | Check one of the two boxes, not both and not neither.                                                                                                                                                                    |
 | You checked "AI tools were used" but the description has no "Assisted-by" line. | Add a line `Assisted-by: <tool> (<model>)`, for example `Assisted-by: Claude Code (claude-opus-4)`.                                                                                                                      |
 | You checked "No AI tools were used" but the description has an "Assisted-by:".  | Remove the `Assisted-by:` line or check the other box.                                                                                                                                                                   |

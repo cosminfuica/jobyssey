@@ -24,9 +24,14 @@ function body(
   overrides: Partial<Record<string, string[] | null>> = {}
 ): string {
   const sections: Record<string, string[] | null> = {
-    Problem: ["The health endpoint returns 500 when the database is down."],
-    Approach: ["Return 503 with a reason; a retry loop was rejected."],
-    "How I tested": ["Ran `pnpm check` and saw it pass."],
+    Summary: [
+      "The health endpoint returns 500 when the database is down; it now returns 503, a retry loop was rejected.",
+    ],
+    Evidence: [
+      "- **Before:** `curl -i localhost:4180/api/system/health`: 500.",
+      "- **After:** the same call: 503. `pnpm check` passes.",
+    ],
+    "Merge danger": ["- **Door:** two-way", "- **Blast radius:** api"],
     "AI assistance": NO_AI,
     "Linked issue": ["Closes: #12"],
     ...overrides,
@@ -65,27 +70,51 @@ test("a complete contributor pull request passes", () => {
 });
 
 test.for([
-  ["Problem", "missing", null, PROBLEMS.missing("Problem")],
+  ["Summary", "missing", null, PROBLEMS.missing("Summary")],
   [
-    "Approach",
+    "Merge danger",
     "prompt",
-    ["_Replace this line: what you changed._"],
-    PROBLEMS.prompt("Approach"),
+    ["_Replace this line: fill both lines._"],
+    PROBLEMS.prompt("Merge danger"),
   ],
-  ["Problem", "empty", [""], PROBLEMS.empty("Problem")],
-  ["Approach", "filler", ["N/A"], PROBLEMS.empty("Approach")],
-  ["Problem", "dashes", ["---"], PROBLEMS.empty("Problem")],
+  ["Summary", "empty", [""], PROBLEMS.empty("Summary")],
+  ["Evidence", "filler", ["N/A"], PROBLEMS.empty("Evidence")],
+  ["Summary", "dashes", ["---"], PROBLEMS.empty("Summary")],
   [
-    "How I tested",
+    "Evidence",
     "no command",
-    ["I clicked around and it worked."],
+    ["- **Before:** it crashed.", "- **After:** it works."],
     PROBLEMS.noCommand,
   ],
   [
-    "How I tested",
+    "Evidence",
     "only empty code spans",
     ["I ran `` and ` `."],
     PROBLEMS.noCommand,
+  ],
+  [
+    "Merge danger",
+    "labels left empty",
+    ["- **Door:**", "- **Blast radius:**"],
+    PROBLEMS.mergeDanger,
+  ],
+  [
+    "Merge danger",
+    "a door that is neither way",
+    ["- **Door:** maybe", "- **Blast radius:** api"],
+    PROBLEMS.mergeDanger,
+  ],
+  [
+    "Merge danger",
+    "no blast radius",
+    ["- **Door:** one-way"],
+    PROBLEMS.mergeDanger,
+  ],
+  [
+    "Merge danger",
+    "a door only inside a code block",
+    ["```", "Door: two-way", "```", "- **Blast radius:** api"],
+    PROBLEMS.mergeDanger,
   ],
   [
     "AI assistance",
@@ -116,6 +145,31 @@ test.for([
     expect(checkPullRequest(input)).toEqual([problem]);
   }
 );
+
+test.for([
+  [
+    "plain labels and a sentence",
+    ["Door: one-way, the migration drops a column.", "Blast radius: data"],
+  ],
+  ["star bullets", ["* **Door:** Two-way", "* **Blast radius:** docs"]],
+] as [string, string[]][])("Merge danger with %s passes", ([, lines]) => {
+  expect(
+    checkPullRequest(contributor({ body: body({ "Merge danger": lines }) }))
+  ).toEqual([]);
+});
+
+test("required headings match in any case, as the pr skill writes them", () => {
+  const skillCase = body({
+    Summary: null,
+    Evidence: null,
+    "Merge danger": null,
+    summary: ["The health endpoint returns 503 when the database is down."],
+    EVIDENCE: ["- **Before:** `pnpm check` failed.", "- **After:** it passes."],
+    "Merge Danger": ["**Door:** two-way", "", "**Blast Radius:** api"],
+  });
+  expect(skillCase).not.toMatch(/^## (Summary|Evidence|Merge danger)$/m);
+  expect(checkPullRequest(contributor({ body: skillCase }))).toEqual([]);
+});
 
 test("AI tools with an Assisted-by line pass", () => {
   const ai = [...USED_AI, "", "Assisted-by: Claude Code (claude-opus-4)"];
@@ -202,7 +256,7 @@ test("release-please pull requests are exempt; a fork branch with that name is n
   expect(checkPullRequest(input)).toEqual([]);
   const fork = { ...input, authorAssociation: "CONTRIBUTOR" };
   expect(isExempt(fork)).toBe(false);
-  expect(checkPullRequest(fork)).toContain(PROBLEMS.missing("Problem"));
+  expect(checkPullRequest(fork)).toContain(PROBLEMS.missing("Summary"));
 });
 
 test("bot authors are exempt", () => {
@@ -227,18 +281,18 @@ test.for([
 
 test("splitSections handles CRLF and drops HTML comments", () => {
   const sections = splitSections(
-    "intro\r\n## Problem  \r\nreal text\r\n<!-- ## Approach\r\nhidden -->\r\n## How I tested\r\n`pnpm check`\r\n<!-- unclosed\r\n## Linked issue\r\nCloses: #1"
+    "intro\r\n## Summary  \r\nreal text\r\n<!-- ## Merge danger\r\nhidden -->\r\n## Evidence\r\n`pnpm check`\r\n<!-- unclosed\r\n## Linked issue\r\nCloses: #1"
   );
-  expect([...sections.keys()]).toEqual(["", "Problem", "How I tested"]);
-  expect(sections.get("Problem")).toEqual(["real text", ""]);
-  expect(sections.get("How I tested")).toEqual(["`pnpm check`", ""]);
+  expect([...sections.keys()]).toEqual(["", "Summary", "Evidence"]);
+  expect(sections.get("Summary")).toEqual(["real text", ""]);
+  expect(sections.get("Evidence")).toEqual(["`pnpm check`", ""]);
 });
 
 test("fixture template-untouched lists every prompt and the missing issue", () => {
   expect(checkPullRequest(fixture("template-untouched"))).toEqual([
-    PROBLEMS.prompt("Problem"),
-    PROBLEMS.prompt("Approach"),
-    PROBLEMS.prompt("How I tested"),
+    PROBLEMS.prompt("Summary"),
+    PROBLEMS.prompt("Evidence"),
+    PROBLEMS.prompt("Merge danger"),
     PROBLEMS.prompt("AI assistance"),
     PROBLEMS.prompt("Linked issue"),
     PROBLEMS.noIssue,

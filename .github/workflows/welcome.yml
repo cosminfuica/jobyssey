@@ -26,7 +26,7 @@ jobs:
             When you do open one, the `pr-gate` check posts one comment listing anything missing. It needs:
 
             1. `Closes: #<issue>` pointing to an issue labelled `ready-for-agent` or `ready-for-human`.
-            2. Every template section in your own words; How I tested names the commands you ran.
+            2. Every template section in your own words; Evidence names the commands you ran and Merge danger says one-way or two-way.
             3. One AI assistance box checked, plus `Assisted-by: <tool> (<model>)` if you used AI.
             4. At most 300 changed lines in a first contribution.
 
@@ -35,7 +35,7 @@ jobs:
             Thanks for your first pull request. The `pr-gate` check posts one comment listing anything missing. It needs:
 
             1. `Closes: #<issue>` pointing to an issue labelled `ready-for-agent` or `ready-for-human`.
-            2. Every template section in your own words; How I tested names the commands you ran.
+            2. Every template section in your own words; Evidence names the commands you ran and Merge danger says one-way or two-way.
             3. One AI assistance box checked, plus `Assisted-by: <tool> (<model>)` if you used AI.
             4. At most 300 changed lines in a first contribution.
 

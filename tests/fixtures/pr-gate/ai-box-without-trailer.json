@@ -3,7 +3,7 @@
     "data": {
       "repository": {
         "pullRequest": {
-          "body": "## Problem\n\nThe health endpoint returns 500 when the database is down, so the start script cannot tell a slow boot from a crash.\n\n## Approach\n\nReturn 503 with a reason instead; a retry loop in the caller was rejected because it hides the failure.\n\n## How I tested\n\nRan `pnpm check` and `curl -i localhost:3000/api/system/health` with Postgres stopped: 503.\n\n## AI assistance\n\n- [ ] No AI tools were used.\n- [x] AI tools were used. I reviewed every changed line and added an `Assisted-by:` line below.\n\n## Linked issue\n\nCloses: #12\n",
+          "body": "## Summary\n\nThe health endpoint returns 500 when the database is down, so the start script cannot tell a slow boot from a crash. It now returns 503 with a reason; a retry loop in the caller was rejected because it hides the failure.\n\n```diff\n GET /api/system/health (database down)\n-  500\n+  503 with a reason\n```\n\n## Evidence\n\n- **Before:** `curl -i localhost:3000/api/system/health` with Postgres stopped: 500.\n- **After:** the same call: 503. `pnpm check` passes.\n\n## Merge danger\n\n- **Door:** two-way\n- **Blast radius:** api\n\n## AI assistance\n\n- [ ] No AI tools were used.\n- [x] AI tools were used. I reviewed every changed line and added an `Assisted-by:` line below.\n\n## Linked issue\n\nCloses: #12\n",
           "authorAssociation": "CONTRIBUTOR",
           "author": {
             "__typename": "User",
