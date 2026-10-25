@@ -26,7 +26,10 @@
     "lint:unused": "knip",
     "ui:add": "node scripts/shadcn-add.ts",
     "gen:feature": "node scripts/gen-feature.ts",
-    "check": "pnpm check:workspace && pnpm lint:files && pnpm lint:deps && turbo run typecheck lint && pnpm typecheck:root && pnpm lint:root && pnpm lint:boundaries && pnpm lint:unused && pnpm test && pnpm test:root"
+    "start": "pnpm --filter @jobyssey/web build && node apps/api/src/main.ts",
+    "dev": "turbo run dev",
+    "smoke": "node scripts/smoke.ts",
+    "check": "pnpm check:workspace && pnpm lint:files && pnpm lint:deps && turbo run typecheck lint test && pnpm typecheck:root && pnpm lint:root && pnpm lint:boundaries && pnpm check:migrations && pnpm lint:unused && pnpm test:root"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
