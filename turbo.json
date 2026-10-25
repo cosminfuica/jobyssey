@@ -1,0 +1,44 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "transit": {
+      "dependsOn": ["^transit"]
+    },
+    "typecheck": {
+      "dependsOn": ["transit"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tooling/typescript-config/**"]
+    },
+    "lint": {
+      "dependsOn": ["transit"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/eslint.config.js",
+        "$TURBO_ROOT$/tooling/eslint-config/**",
+        "$TURBO_ROOT$/tooling/typescript-config/**"
+      ]
+    },
+    "test": {
+      "dependsOn": ["transit"],
+      "env": ["TEST_DATABASE_URL", "TEST_DB"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/tooling/vitest-config/**"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": [
+        "HOST",
+        "PORT",
+        "JOBYSSEY_DATA_DIR",
+        "DATABASE_URL",
+        "ALLOWED_HOSTS",
+        "LOG_LEVEL",
+        "JOBYSSEY_ALLOW_REMOTE"
+      ]
+    }
+  }
+}
