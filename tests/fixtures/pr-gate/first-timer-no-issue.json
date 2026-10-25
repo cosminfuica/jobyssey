@@ -3,7 +3,7 @@
     "data": {
       "repository": {
         "pullRequest": {
-          "body": "## Problem\r\n\r\nThe health endpoint returns 500 when the database is down, so the start script cannot tell a slow boot from a crash.\r\n\r\n## Approach\r\n\r\nReturn 503 with a reason instead; a retry loop in the caller was rejected because it hides the failure.\r\n\r\n## How I tested\r\n\r\nRan `pnpm check` and `curl -i localhost:3000/api/system/health` with Postgres stopped: 503.\r\n\r\n## AI assistance\r\n\r\n- [x] No AI tools were used.\r\n- [ ] AI tools were used. I reviewed every changed line and added an `Assisted-by:` line below.\r\n\r\n## Linked issue\r\n\r\nI found no issue for this; it is a one-line fix.\r\n",
+          "body": "## Summary\r\n\r\nThe health endpoint returns 500 when the database is down, so the start script cannot tell a slow boot from a crash. It now returns 503 with a reason; a retry loop in the caller was rejected because it hides the failure.\r\n\r\n```diff\r\n GET /api/system/health (database down)\r\n-  500\r\n+  503 with a reason\r\n```\r\n\r\n## Evidence\r\n\r\n- **Before:** `curl -i localhost:3000/api/system/health` with Postgres stopped: 500.\r\n- **After:** the same call: 503. `pnpm check` passes.\r\n\r\n## Merge danger\r\n\r\n- **Door:** two-way\r\n- **Blast radius:** api\r\n\r\n## AI assistance\r\n\r\n- [x] No AI tools were used.\r\n- [ ] AI tools were used. I reviewed every changed line and added an `Assisted-by:` line below.\r\n\r\n## Linked issue\r\n\r\nI found no issue for this; it is a one-line fix.\r\n",
           "authorAssociation": "FIRST_TIME_CONTRIBUTOR",
           "author": {
             "__typename": "User",

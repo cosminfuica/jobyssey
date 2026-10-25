@@ -28,7 +28,7 @@ jobs:
               "",
               "How to resubmit:",
               "1. Start from an issue a maintainer has labelled `ready-for-agent` or `ready-for-human`.",
-              "2. Write every template section in your own words, including the commands you ran in How I tested.",
+              "2. Write every template section in your own words, including the commands you ran in Evidence.",
               "3. Run `pnpm check` and the change itself (in the browser or with curl) before pushing.",
               "4. Check one AI assistance box and add `Assisted-by: <tool> (<model>)` if you used AI.",
               "",

@@ -1,14 +1,20 @@
-## Problem
+## Summary
 
-_Replace this line: what is wrong or missing, and for whom? Link the evidence._
+_Replace this line: one or two sentences on what was wrong and for whom, then the smallest view of the change (a diff sketch, a file or call tree, pseudocode or a Mermaid diagram). Name one alternative you rejected._
 
-## Approach
+## Evidence
 
-_Replace this line: what you changed and why this way; name one alternative you rejected._
+_Replace this line: show the change working, before and after: the exact commands you ran, in backticks, and what they printed, such as a test that failed before and passes now, plus a screenshot for a visual change. Always include `pnpm check`._
 
-## How I tested
+- **Before:**
+- **After:**
 
-_Replace this line: the exact commands you ran and what you saw, for example `pnpm check`._
+## Merge danger
+
+_Replace this line: fill both lines. Door: two-way if a revert undoes the change, one-way if it does not (data loss, a destructive migration, a published API or file format). Blast radius: one word for what could break, such as docs, ci, web, api or data, then optionally one sentence._
+
+- **Door:**
+- **Blast radius:**
 
 ## AI assistance
 

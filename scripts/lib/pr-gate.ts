@@ -1,8 +1,8 @@
 // Pure checks behind the pr-gate workflow: template sections, AI disclosure, linked issue and size. scripts/pr-gate.ts reads the pull request.
 const REQUIRED_SECTIONS = [
-  "Problem",
-  "Approach",
-  "How I tested",
+  "Summary",
+  "Evidence",
+  "Merge danger",
   "AI assistance",
   "Linked issue",
 ] as const;
@@ -30,6 +30,9 @@ const PROMPT = "_Replace this line:";
 const FILLER = /^(n\/?a|none|nothing|tbd|todo|-+|\.+)[.!]?$/i;
 const FENCE = /^(```|~~~)/;
 const ASSISTED = /^Assisted-by: [^()]+ \([^()]+\)$/;
+// Matched after * and _ are stripped, so bold labels and list markers both work.
+const DOOR = /^(?:- )?Door:\s*(?:one-way|two-way)\b/i;
+const BLAST_RADIUS = /^(?:- )?Blast radius:\s*\S/i;
 
 export type GateInput = {
   body: string;
@@ -81,7 +84,9 @@ export const PROBLEMS = {
   empty: (name: string) =>
     `Section "## ${name}" is empty or holds only filler such as "n/a" or "tbd". Write it in your own words.`,
   noCommand:
-    'Section "## How I tested" names no command. Put each command you ran in backticks, for example `pnpm check`.',
+    'Section "## Evidence" names no command. Put each command you ran in backticks, for example `pnpm check`.',
+  mergeDanger:
+    'Section "## Merge danger" needs a "Door:" line that says one-way or two-way and a "Blast radius:" line with a word after it.',
   aiBoxes: 'Section "## AI assistance": check exactly one box.',
   aiWithoutTrailer:
     'You checked "AI tools were used" but the description has no "Assisted-by: <tool> (<model>)" line.',
@@ -146,7 +151,11 @@ export function splitSections(body: string): Map<string, string[]> {
       current.push(line);
       continue;
     }
-    const name = heading.trim();
+    // Required headings match in any case ("## Merge Danger"), keyed by the template spelling.
+    const name =
+      REQUIRED_SECTIONS.find(
+        (section) => section.toLowerCase() === heading.trim().toLowerCase()
+      ) ?? heading.trim();
     current = sections.get(name) ?? [];
     sections.set(name, current);
   }
@@ -190,13 +199,24 @@ export function checkPullRequest(input: GateInput): string[] {
     else filled.add(name);
   }
 
-  if (filled.has("How I tested")) {
-    const lines = sections.get("How I tested") ?? [];
+  if (filled.has("Evidence")) {
+    const lines = sections.get("Evidence") ?? [];
     const mask = fenceMask(lines);
     const named = lines.some((line, i) =>
       mask[i] ? line !== "" && !FENCE.test(line) : hasCodeSpan(line)
     );
     if (!named) problems.push(PROBLEMS.noCommand);
+  }
+
+  if (filled.has("Merge danger")) {
+    const danger = prose(sections.get("Merge danger") ?? []).map((line) =>
+      line.replace(/[*_]/g, "").trim()
+    );
+    if (
+      !danger.some((line) => DOOR.test(line)) ||
+      !danger.some((line) => BLAST_RADIUS.test(line))
+    )
+      problems.push(PROBLEMS.mergeDanger);
   }
 
   if (!maintainer && filled.has("AI assistance")) {
