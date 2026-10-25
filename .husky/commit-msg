@@ -1,0 +1,3 @@
+hook_local="$(git rev-parse --path-format=absolute --git-common-dir)/hooks/commit-msg.local"
+if [ -x "$hook_local" ]; then "$hook_local" "$1"; fi
+pnpm exec commitlint --edit "$1"

@@ -19,6 +19,9 @@
     "test:root": "vitest run --config vitest.config.ts"
   },
   "devDependencies": {
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
+    "@commitlint/types": "catalog:",
     "@jobyssey/eslint-config": "workspace:*",
     "@jobyssey/typescript-config": "workspace:*",
     "@types/node": "catalog:",
@@ -28,6 +31,7 @@
     "prettier": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "yaml": "catalog:"
   }
 }
