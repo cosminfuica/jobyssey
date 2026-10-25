@@ -1,0 +1,104 @@
+# CI. `ci-summary` is the only required check in the branch rules: it fails
+# unless every job below succeeded, so one status covers everything and a
+# skipped or cancelled job cannot pass.
+#
+# What each job proves:
+# - check: `pnpm check` passes (workspace guards, typecheck, lint, unit and
+#   PGlite tests) and the integration tests also pass against Postgres 17
+#   through TEST_DATABASE_URL.
+# - build-smoke: the web app builds and the built API boots, serves it and
+#   cleans up (`pnpm smoke`).
+# - gen-feature: the feature template works. `pnpm gen:feature zz-probe` makes a
+#   package that passes the workspace guards, boundaries, tests, typecheck and
+#   lint, and the generator touches only the files it should.
+# - actionlint: the workflow files are valid.
+# - ci-summary: reports one status from the four jobs above.
+
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+  merge_group: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "ci-${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+
+  build-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm smoke
+
+  gen-feature:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Generate the probe feature
+        run: pnpm gen:feature zz-probe
+      - name: Check the probe feature
+        run: pnpm check:workspace && pnpm lint:boundaries && pnpm exec turbo run test typecheck lint --filter=@jobyssey/zz-probe --filter=@jobyssey/registry
+      - name: Check the generator touched only what it should
+        run: test "$(git status --porcelain | awk '{print $2}' | sort | tr '\n' ' ')" = "packages/registry/client.tsx packages/registry/package.json packages/registry/server.ts packages/zz-probe/ pnpm-lock.yaml "
+
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12 -color
+
+  ci-summary:
+    needs: [check, build-smoke, gen-feature, actionlint]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail unless every job succeeded
+        env:
+          NEEDS: "${{ toJSON(needs) }}"
+        run: |
+          echo "$NEEDS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+          echo "$NEEDS" | jq -e 'all(.[]; .result == "success")' > /dev/null
