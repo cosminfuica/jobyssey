@@ -21,7 +21,7 @@ The workflow needs a repository secret named `RELEASE_PLEASE_TOKEN`. A personal 
 3. Save it as the repository secret `RELEASE_PLEASE_TOKEN`.
 4. Write the expiry date below and set a reminder to rotate the token before then.
 
-Expires: `<set when the token is created>`
+Expires: `2027-10-26`
 
 While the secret is missing, the workflow skips the release step with a notice (`RELEASE_PLEASE_TOKEN is not set; skipping release`) and `main` stays green. When the token expires, release-please fails until a new one is saved.
 
