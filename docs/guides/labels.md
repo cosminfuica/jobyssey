@@ -38,7 +38,7 @@ The labeler workflow sets these from the changed paths (`.github/labeler.yml`).
 - `area:packages`: changes under `packages/`.
 - `area:tooling`: changes under `tooling/`.
 - `area:scripts`: changes under `scripts/`.
-- `area:docs`: changes under `docs/` or any Markdown file at the root.
+- `area:docs`: changes under `docs/` or any Markdown file at the root or directly in `.github/`.
 - `area:github`: changes under `.github/`.
 
 ## GitHub defaults kept

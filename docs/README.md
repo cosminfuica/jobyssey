@@ -12,4 +12,6 @@
   - `issue-tracker.md`, `triage-labels.md`: GitHub Issues and triage labels.
   - `harness.md`: how an orchestrating agent delegates and verifies work.
 
+- `PRODUCT.md`: the product context design tools read (Impeccable finds it here).
+
 `ARCHITECTURE.md` at the repository root is the map of the code.

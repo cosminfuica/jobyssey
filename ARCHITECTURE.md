@@ -44,7 +44,9 @@ Root-level tests, run by `pnpm test:root`: `tests/boundaries/` (one fixture tree
 
 ### Root files
 
-`package.json` (scripts), `pnpm-workspace.yaml` (workspace globs, the version catalog), `turbo.json` (task graph), `workspace-policy.json`, `.dependency-cruiser.cjs` and `dependency-cruiser.rules.cjs`, `.ls-lint.yml`, `knip.jsonc`, `eslint.config.js`, `commitlint.config.ts` and `commitlint.pr.config.ts`, `vitest.config.ts`, `tsconfig.json` (root scripts and tests), `tsconfig.depcruise.json`, `.husky/` (git hooks), `.github/` (workflows, templates, CODEOWNERS, Renovate), `GLOSSARY.md`, `PRODUCT.md`.
+`package.json` (scripts), `pnpm-workspace.yaml` (workspace globs, the version catalog), `turbo.json` (task graph), `workspace-policy.json`, `.dependency-cruiser.cjs` and `dependency-cruiser.rules.cjs`, `.ls-lint.yml`, `knip.jsonc`, `eslint.config.js`, `commitlint.config.ts` and `commitlint.pr.config.ts`, `vitest.config.ts`, `tsconfig.json` (root scripts and tests), `tsconfig.depcruise.json`, `.husky/` (git hooks), `.github/` (workflows, templates, CODEOWNERS, Renovate, release-please config and manifest, and the community files `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md`, `CLA.md`), `GLOSSARY.md`. `docs/PRODUCT.md` is the product context for design tools.
+
+A file stays at the root only when a tool or reader looks for it there: the configs above, `README.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md`, `CONTRIBUTING.md`, `AGENTS.md`, `ARCHITECTURE.md` and `GLOSSARY.md`. A workspace that nests this repository at `core/` loads `dependency-cruiser.rules.cjs`, `commitlint.config.ts` and `eslint.config.js` by path, so they stay at the root too.
 
 ## Where does X go
 

@@ -65,7 +65,7 @@ docs/           ADRs, guides and agent notes
 - [GLOSSARY.md](GLOSSARY.md): the words the project uses.
 - [packages/README.md](packages/README.md): rules for packages.
 - [CONTRIBUTING.md](CONTRIBUTING.md): how to contribute, including the AI-assistance policy.
-- [SECURITY.md](SECURITY.md): how to report a vulnerability.
+- [SECURITY.md](.github/SECURITY.md): how to report a vulnerability.
 
 ## License
 

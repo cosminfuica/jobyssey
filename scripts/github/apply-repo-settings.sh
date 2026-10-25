@@ -131,7 +131,7 @@ fi
 echo "7. manual steps no API covers"
 cat << EOF
 - Install the Renovate GitHub App on $REPO.
-- Link $REPO at https://cla-assistant.io and upload CLA.md. Allowlist the owner account and *[bot] users so release and dependency pull requests are not blocked.
+- Link $REPO at https://cla-assistant.io and upload .github/CLA.md. Allowlist the owner account and *[bot] users so release and dependency pull requests are not blocked.
 - Create the RELEASE_PLEASE_TOKEN secret: a fine-grained personal access token with contents and pull requests read/write.
 - Open one pull request and confirm the license/cla check name; the ruleset expects exactly that name.
 - Optional, to accept pull requests from collaborators only (not applied by this script):
