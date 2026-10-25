@@ -1,0 +1,11 @@
+{
+  "name": "@jobyssey/vitest-config",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "vitest": "catalog:"
+  }
+}

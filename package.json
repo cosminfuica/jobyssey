@@ -13,14 +13,21 @@
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "typecheck:root": "tsc -p tsconfig.json",
+    "lint:root": "eslint --max-warnings 0 --no-error-on-unmatched-pattern scripts tests tooling eslint.config.js vitest.config.ts",
+    "test:root": "vitest run --config vitest.config.ts"
   },
   "devDependencies": {
+    "@jobyssey/eslint-config": "workspace:*",
+    "@jobyssey/typescript-config": "workspace:*",
     "@types/node": "catalog:",
+    "eslint": "catalog:",
     "husky": "catalog:",
     "lint-staged": "catalog:",
     "prettier": "catalog:",
     "turbo": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

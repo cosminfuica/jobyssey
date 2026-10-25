@@ -1,0 +1,15 @@
+{
+  "extends": "@jobyssey/typescript-config/base.json",
+  "include": [
+    "scripts/**/*.ts",
+    "tests/**/*.ts",
+    "tooling/**/*.ts",
+    "*.config.ts",
+    "eslint.config.js"
+  ],
+  "exclude": ["tests/**/fixtures/**"],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false
+  }
+}
