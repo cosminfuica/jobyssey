@@ -17,7 +17,12 @@
     "typecheck:root": "tsc -p tsconfig.json",
     "lint:root": "eslint --max-warnings 0 --no-error-on-unmatched-pattern scripts tests tooling eslint.config.js vitest.config.ts",
     "test:root": "vitest run --config vitest.config.ts",
-    "lint:boundaries": "depcruise --config .dependency-cruiser.cjs apps packages tooling"
+    "lint:boundaries": "depcruise --config .dependency-cruiser.cjs apps packages tooling",
+    "check:workspace": "node scripts/check-workspace.ts",
+    "lint:files": "ls-lint",
+    "lint:deps": "sherif",
+    "lint:unused": "knip",
+    "check": "pnpm check:workspace && pnpm lint:files && pnpm lint:deps && turbo run typecheck lint && pnpm typecheck:root && pnpm lint:root && pnpm lint:boundaries && pnpm lint:unused && pnpm test && pnpm test:root"
   },
   "devDependencies": {
     "@commitlint/cli": "catalog:",
@@ -25,15 +30,25 @@
     "@commitlint/types": "catalog:",
     "@jobyssey/eslint-config": "workspace:*",
     "@jobyssey/typescript-config": "workspace:*",
+    "@ls-lint/ls-lint": "catalog:",
     "@types/node": "catalog:",
     "dependency-cruiser": "catalog:",
+    "drizzle-orm": "catalog:",
     "eslint": "catalog:",
     "husky": "catalog:",
+    "knip": "catalog:",
     "lint-staged": "catalog:",
     "prettier": "catalog:",
+    "sherif": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:",
     "yaml": "catalog:"
+  },
+  "sherif": {
+    "failOnWarnings": true,
+    "ignoreRule": [
+      "non-existant-packages"
+    ]
   }
 }

@@ -1,0 +1,36 @@
+ls:
+  packages:
+    .dir: kebab-case
+  packages/*:
+    .ts: regex:(index|server|schema|shared)
+    .tsx: regex:client
+    .config.ts: regex:(drizzle|vitest)
+    .json: regex:(package|tsconfig|components)
+    .md: regex:(README|AGENTS)
+    .js: exists:0
+  packages/*/lib: &code
+    .dir: kebab-case
+    .ts: kebab-case
+    .tsx: kebab-case
+    .test.ts: kebab-case
+    .test.tsx: kebab-case
+    .integration.test.ts: kebab-case
+    .integration.test.tsx: kebab-case
+    .css: kebab-case
+    .json: kebab-case
+  packages/*/tests: *code
+  packages/ui/src: *code
+  apps/*/src: *code
+  scripts: *code
+  tooling/*: *code
+ignore:
+  - node_modules
+  - "**/node_modules"
+  - "**/dist"
+  - "**/.turbo"
+  - packages/db/migrations
+  - "**/tests/fixtures"
+  - tests/boundaries/fixtures
+  - .git
+  - .omo
+  - .agents

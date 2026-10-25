@@ -1,0 +1,37 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  // Todo 16 flips this to true once every public consumer exists.
+  "includeEntryExports": false,
+  "workspaces": {
+    ".": {
+      "entry": [
+        "scripts/*.ts",
+        "commitlint*.config.ts",
+        "eslint.config.js",
+        "vitest.config.ts",
+      ],
+      "project": ["scripts/**/*.ts", "tests/**/*.ts"],
+    },
+    "packages/*": {
+      "entry": ["{index,server,schema,shared}.ts", "client.tsx"],
+      "project": ["**/*.{ts,tsx}"],
+    },
+    "packages/ui": {
+      "entry": ["src/components/*.tsx", "src/hooks/*.ts", "src/lib/*.ts"],
+    },
+    "apps/api": {
+      "entry": ["src/main.ts", "src/dev.ts"],
+    },
+    "apps/web": {
+      "entry": ["src/main.tsx", "vite.config.ts"],
+    },
+    "tooling/*": {
+      "entry": ["index.{js,ts}"],
+    },
+  },
+  "ignore": ["**/tests/fixtures/**", "tests/boundaries/fixtures/**"],
+  "rules": {
+    // The catalog already holds the versions for packages added by later todos (db, api-shell, ui, apps); knip lists them on every run. Set back to "error" once every entry is referenced.
+    "catalog": "warn",
+  },
+}
