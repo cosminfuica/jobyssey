@@ -1,0 +1,137 @@
+[
+  {
+    "name": "needs-triage",
+    "color": "fbca04",
+    "description": "A maintainer still has to evaluate the issue"
+  },
+  {
+    "name": "needs-info",
+    "color": "fef2c0",
+    "description": "Waiting on the reporter for more information"
+  },
+  {
+    "name": "ready-for-agent",
+    "color": "0e8a16",
+    "description": "Fully specified, ready for an agent to pick up"
+  },
+  {
+    "name": "ready-for-human",
+    "color": "1d76db",
+    "description": "Accepted, needs a human to implement it"
+  },
+  {
+    "name": "wontfix",
+    "color": "ffffff",
+    "description": "Won't be acted on"
+  },
+  {
+    "name": "gate-failed",
+    "color": "b60205",
+    "description": "The pull request gate found something to fix. Closes automatically after 7 days"
+  },
+  {
+    "name": "size-ok",
+    "color": "c2e0c6",
+    "description": "A maintainer lets a first contribution exceed 300 changed lines"
+  },
+  {
+    "name": "slop",
+    "color": "6e5494",
+    "description": "A maintainer closed the pull request as low effort"
+  },
+  {
+    "name": "size/XS",
+    "color": "3cbf00",
+    "description": "Up to 10 changed lines"
+  },
+  {
+    "name": "size/S",
+    "color": "5d9801",
+    "description": "Up to 50 changed lines"
+  },
+  {
+    "name": "size/M",
+    "color": "7f7203",
+    "description": "Up to 200 changed lines"
+  },
+  {
+    "name": "size/L",
+    "color": "a03e03",
+    "description": "Up to 500 changed lines"
+  },
+  {
+    "name": "size/XL",
+    "color": "c10000",
+    "description": "More than 500 changed lines"
+  },
+  {
+    "name": "area:apps",
+    "color": "c5def5",
+    "description": "Changes under apps/"
+  },
+  {
+    "name": "area:packages",
+    "color": "c5def5",
+    "description": "Changes under packages/"
+  },
+  {
+    "name": "area:tooling",
+    "color": "c5def5",
+    "description": "Changes under tooling/"
+  },
+  {
+    "name": "area:scripts",
+    "color": "c5def5",
+    "description": "Changes under scripts/"
+  },
+  {
+    "name": "area:docs",
+    "color": "c5def5",
+    "description": "Changes under docs/ or any Markdown file at the root"
+  },
+  {
+    "name": "area:github",
+    "color": "c5def5",
+    "description": "Changes under .github/"
+  },
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Something doesn't work"
+  },
+  {
+    "name": "enhancement",
+    "color": "a2eeef",
+    "description": "A new feature or a change to how one works"
+  },
+  {
+    "name": "documentation",
+    "color": "0075ca",
+    "description": "Docs only"
+  },
+  {
+    "name": "good first issue",
+    "color": "7057ff",
+    "description": "A good start for a new contributor"
+  },
+  {
+    "name": "help wanted",
+    "color": "008672",
+    "description": "A maintainer would welcome a pull request"
+  },
+  {
+    "name": "duplicate",
+    "color": "cfd3d7",
+    "description": "Already reported elsewhere"
+  },
+  {
+    "name": "invalid",
+    "color": "e4e669",
+    "description": "Not a valid report"
+  },
+  {
+    "name": "question",
+    "color": "d876e3",
+    "description": "A question, better asked in Discussions"
+  }
+]
