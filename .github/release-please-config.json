@@ -18,6 +18,10 @@
     { "type": "chore", "section": "Chores", "hidden": true }
   ],
   "packages": {
-    ".": { "package-name": "jobyssey", "changelog-path": "CHANGELOG.md" }
+    ".": {
+      "package-name": "jobyssey",
+      "changelog-path": "CHANGELOG.md",
+      "initial-version": "0.0.1"
+    }
   }
 }
