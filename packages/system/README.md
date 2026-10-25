@@ -1,5 +1,7 @@
 # @jobyssey/system
 
+## Purpose
+
 `@jobyssey/system` is the reference feature: every new feature is generated
 from a copy of this package with the name replaced. It answers
 `GET /api/system/status` with the version, Node, database driver and
@@ -26,6 +28,11 @@ moves to `lib/`.
 - `schema.ts` (`./schema`): this feature has no tables. A feature that
   stores data adds its Drizzle tables here, each with an `account_id`
   column, and reads only its own tables.
+
+## Rules
+
+- It is the generator's template (`pnpm gen:feature`): a change here reaches every feature generated afterwards. CI's gen-feature job generates a probe feature from it and runs the checks on the copy.
+- It must stay registered in `packages/registry` (check-workspace CW13).
 
 ## Tests
 

@@ -1,5 +1,7 @@
 # @jobyssey/registry
 
+## Purpose
+
 The one list of core features. The API and the web app compose themselves
 from it, so they never import a feature package directly.
 

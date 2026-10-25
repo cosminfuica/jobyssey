@@ -1,8 +1,12 @@
 # @jobyssey/auth
 
+## Purpose
+
 The login port: how a request is mapped to an account (public ADR 0004).
 
-## Exports (`index.ts`)
+## Entry points
+
+`index.ts`:
 
 - `AuthAdapter`: the port.
   - `name`: the adapter's name, for logs.
@@ -13,7 +17,7 @@ The login port: how a request is mapped to an account (public ADR 0004).
   without logins. It calls `ensureSingleAccount(db)` once, at creation, and
   maps every request to that account. It has no `routes`.
 
-## Adapter rule
+## Rules
 
 One file per adapter in `lib/`, chosen by the composition root. This package
 holds no config key and no selection switch: the app that starts the server

@@ -1,9 +1,11 @@
 # @jobyssey/accounts
 
+## Purpose
+
 Accounts: every row of a Job Seeker's data belongs to one (public ADR 0013).
 A self-hosted install has exactly one account.
 
-## Exports
+## Entry points
 
 - `index.ts`:
   - `AccountId`: a branded string, so a plain string cannot be passed where an
@@ -17,6 +19,10 @@ A self-hosted install has exactly one account.
   `created_at`). It is the one shared table; every other table needs
   `account_id NOT NULL REFERENCES accounts(id)`. Its migration is generated
   into `packages/db/migrations/` by `pnpm db:generate`.
+
+## Rules
+
+- `accounts` is the one shared table (`SHARED_TABLES` in `@jobyssey/db`); check-workspace CW16 fails on any other table without `account_id`.
 
 ## Tests
 
