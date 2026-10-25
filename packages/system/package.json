@@ -1,0 +1,33 @@
+{
+  "name": "@jobyssey/system",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./server": "./server.ts",
+    "./client": "./client.tsx",
+    "./shared": "./shared.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "lint": "eslint . --max-warnings 0",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@jobyssey/accounts": "workspace:*",
+    "@jobyssey/api-shell": "workspace:*",
+    "@jobyssey/db": "workspace:*",
+    "@jobyssey/ui": "workspace:*",
+    "@jobyssey/web-shell": "workspace:*",
+    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-router": "catalog:",
+    "hono": "catalog:",
+    "react": "catalog:"
+  },
+  "devDependencies": {
+    "@jobyssey/typescript-config": "workspace:*",
+    "@jobyssey/vitest-config": "workspace:*",
+    "@types/react": "catalog:",
+    "vitest": "catalog:"
+  }
+}
