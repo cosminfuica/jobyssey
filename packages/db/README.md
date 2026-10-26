@@ -45,6 +45,7 @@ starting together migrate one after the other.
 
 - Tables live in each package's `schema.ts`, never here (check-workspace CW15); per-account tables need `account_id` (CW16).
 - Migrations stay in order and mark destructive statements (`pnpm check:migrations`).
+- Never edit a migration that `main` already has: a database that ran it never runs it again, and no check catches the edit. Fix it with a new migration (`docs/guides/migrations.md`).
 
 ### Adding a table
 
@@ -52,3 +53,21 @@ starting together migrate one after the other.
    `account_id NOT NULL REFERENCES accounts(id)`).
 2. Run `pnpm db:generate` at the repository root.
 3. Commit the new files under `packages/db/migrations/`.
+
+## Where to look
+
+| Change                                      | Location            | Notes                                                                             |
+| ------------------------------------------- | ------------------- | --------------------------------------------------------------------------------- |
+| Driver choice, open and close               | `lib/open.ts`       | `databaseUrl` wins over `dataDir`; `memory://` takes no lock                      |
+| The lock file                               | `lib/lock.ts`       | Taking over a stale lock is not atomic (see its `shortcut:` comment)              |
+| Migration runs                              | `lib/migrate.ts`    | Advisory lock 727001; `packages/accounts` holds 727002; a new lock needs a new id |
+| Pre-migrate backups                         | `lib/snapshot.ts`   | Called by `migrateDatabase`                                                       |
+| Which `schema.ts` files `db:generate` reads | `drizzle.config.ts` | `../*/schema.ts`: only a package's root `schema.ts`                               |
+
+## Tests
+
+- `tests/lock.test.ts` needs no database; the `*.integration.test.ts` files
+  open real ones.
+- Migration fixtures live in `tests/fixtures/migrations-*/`.
+- Close every handle a test opens: an open PGlite folder keeps
+  `jobyssey.lock`, and this process cannot open the folder again until then.
