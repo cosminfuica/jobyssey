@@ -31,8 +31,6 @@ problem+json errors, request logs, feature mounting and startup.
 
 ## Settings
 
-The composition root passes `env`; this package never reads `process.env`.
-
 | Name                    | Default            | Meaning                                |
 | ----------------------- | ------------------ | -------------------------------------- |
 | `HOST`                  | `127.0.0.1`        | Listen address.                        |
@@ -68,8 +66,14 @@ Jobyssey has no login, so a `HOST` other than `127.0.0.1`, `::1` or
 Names are unique and `auth` is reserved: the login adapter's `routes` are
 mounted at `/api/auth`, before the middleware that resolves the account.
 
-## Tests
+## Where to look
 
-Unit tests use `createApp` in-process. `tests/run.integration.test.ts` starts
-a real server on PGlite (and runs again in the Postgres project when
-`TEST_DATABASE_URL` is set).
+| Change                             | Location          | Notes                                                                                                                                 |
+| ---------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Middleware order, feature mounting | `lib/app.ts`      | The request log runs first, so guard refusals are logged too                                                                          |
+| A guard                            | `lib/security.ts` | Refusal tests: `tests/security.test.ts`                                                                                               |
+| A setting                          | `lib/config.ts`   | Also add it to the table above and to `passThroughEnv` in `turbo.json`: `pnpm dev` runs through turbo, which drops unlisted variables |
+| Startup and shutdown               | `lib/run.ts`      | A failure after the database opens closes it, which releases the lock                                                                 |
+| Serving the built web app          | `lib/app.ts`      | `webDist` is checked once, in `createApp`: a web build made after startup needs a restart                                             |
+| Error bodies                       | `lib/errors.ts`   | An unhandled error answers 500 with no message or stack in the body                                                                   |
+| Tests                              | `tests/`          | Unit tests drive `createApp` in-process; `run.integration.test.ts` boots a real server with `runApi`                                  |
