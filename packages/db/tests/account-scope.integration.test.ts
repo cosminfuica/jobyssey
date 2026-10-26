@@ -43,7 +43,7 @@ afterAll(async () => {
   }
 }, TIMEOUT);
 
-// Tables in "public" that are not shared and lack account_id NOT NULL with a foreign key to accounts(id) (public ADR 0013).
+// Tables in "public" that are not shared and lack account_id NOT NULL with a foreign key to accounts(id).
 async function findUnscopedTables(db: Db): Promise<string[]> {
   const rows = await db
     .select({ name: sql<string>`t.table_name` })

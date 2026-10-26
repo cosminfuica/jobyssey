@@ -23,8 +23,8 @@ Postgres in a data folder) or a Postgres server, and runs migrations.
   `{ applied, snapshot? }`.
 - `coreMigrations`: the migration set generated from every package's
   `schema.ts` into `migrations/`.
-- `SHARED_TABLES`: tables that are not account-scoped (public ADR 0013). Keep
-  it equal to `sharedTables` in `workspace-policy.json`; a root test pins them.
+- `SHARED_TABLES`: tables that are not account-scoped. Keep it equal to
+  `sharedTables` in `workspace-policy.json`; a root test pins them.
 - Types `Db`, `DbDriver`, `DatabaseHandle`, `MigrationSet`.
 
 ## Migration sets

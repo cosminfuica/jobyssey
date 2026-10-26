@@ -28,7 +28,7 @@ The development commands use Turborepo, which collects anonymous usage data. Swi
 - Tests live in each package's `tests/` folder and import the package through its entry points, never its internal files (see [docs/guides/testing.md](docs/guides/testing.md)).
 - Schema changes get a migration from `pnpm db:generate`. Never edit a migration that has been applied. A destructive change is split into expand and contract migrations, and only the contract migration carries the `-- expand-contract: ok` marker (see [docs/guides/migrations.md](docs/guides/migrations.md)).
 - Prettier, ESLint and the workspace guards enforce the code style. Run `pnpm check`; [docs/guides/guards.md](docs/guides/guards.md) explains each message.
-- Dependency licences: permissive licences (MIT, BSD, ISC, Apache-2.0) and MPL-2.0 are fine. AGPL, SSPL and GPL are not allowed in runtime dependencies. Ported code keeps its notice in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+- Dependency licences: permissive licences (MIT, BSD, ISC, Apache-2.0) and MPL-2.0 are fine. AGPL, SSPL and GPL are not allowed in runtime dependencies.
 
 ## Commits
 

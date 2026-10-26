@@ -1,4 +1,4 @@
-// Checks one Drizzle migration folder: journal order, orphan SQL files and destructive statements (ADR 0007).
+// Checks one Drizzle migration folder: journal order, orphan SQL files and destructive statements.
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 

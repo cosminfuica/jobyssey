@@ -3,7 +3,7 @@
 ## Purpose
 
 The UI kit: shadcn/ui components (style `radix-nova`) and the theme tokens
-every web app imports (public ADR 0003).
+every web app imports.
 
 ## Entry points
 

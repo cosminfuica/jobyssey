@@ -1,5 +1,5 @@
 // @ts-check
-// Import boundaries for apps/, packages/ and tooling/ (ADR 0003, 0004, 0013).
+// Import boundaries for apps/, packages/ and tooling/.
 //
 // `build(prefix, policy)` returns the dependency-cruiser config. `prefix` is
 // prepended to every anchored path regex, so another workspace can apply the

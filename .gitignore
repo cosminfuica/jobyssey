@@ -6,6 +6,7 @@ coverage/
 .omo/
 .agents/
 .impeccable/
+docs/adr/
 skills-lock.json
 .env
 .env.*

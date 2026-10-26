@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The login port: how a request is mapped to an account (public ADR 0004).
+The login port: how a request is mapped to an account.
 
 ## Entry points
 

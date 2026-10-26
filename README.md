@@ -15,7 +15,7 @@ Linux and macOS are what the maintainer runs. Windows is expected to work, becau
 
 ## Privacy
 
-The app sends no telemetry and makes no outbound calls, and adding either needs an ADR. `pnpm start` runs the app only; pnpm itself may contact the npm registry for installs, for its pinned version or for update checks, which is the package manager's behaviour, not the app's. The development commands use Turborepo, which collects anonymous usage data that contributors can switch off with `pnpm exec turbo telemetry disable`, as [CONTRIBUTING.md](CONTRIBUTING.md) says.
+The app sends no telemetry and makes no outbound calls. `pnpm start` runs the app only; pnpm itself may contact the npm registry for installs, for its pinned version or for update checks, which is the package manager's behaviour, not the app's. The development commands use Turborepo, which collects anonymous usage data that contributors can switch off with `pnpm exec turbo telemetry disable`, as [CONTRIBUTING.md](CONTRIBUTING.md) says.
 
 ## Quick start
 
@@ -55,13 +55,12 @@ packages/
   system/       system status feature
 tooling/        shared TypeScript, ESLint and Vitest config
 scripts/        workspace checks, generators and repo tools
-docs/           ADRs, guides and agent notes
+docs/           guides and agent notes
 ```
 
 ## Docs
 
 - [ARCHITECTURE.md](ARCHITECTURE.md): how the parts fit together.
-- [docs/adr/](docs/adr/): the decisions and why they were made.
 - [GLOSSARY.md](GLOSSARY.md): the words the project uses.
 - [packages/README.md](packages/README.md): rules for packages.
 - [CONTRIBUTING.md](CONTRIBUTING.md): how to contribute, including the AI-assistance policy.

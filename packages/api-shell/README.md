@@ -3,8 +3,7 @@
 ## Purpose
 
 The HTTP server every Jobyssey API runs in: settings, the security guards,
-problem+json errors, request logs, feature mounting and startup (public ADRs
-0005, 0007, 0009).
+problem+json errors, request logs, feature mounting and startup.
 
 ## Entry points
 

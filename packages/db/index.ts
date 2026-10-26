@@ -16,5 +16,5 @@ export const coreMigrations: MigrationSet = {
   table: "__drizzle_migrations",
 };
 
-// Tables without account_id (public ADR 0013); keep in step with "sharedTables" in workspace-policy.json.
+// Tables without account_id; keep in step with "sharedTables" in workspace-policy.json.
 export const SHARED_TABLES: ReadonlySet<string> = new Set(["accounts"]);

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Accounts: every row of a Job Seeker's data belongs to one (public ADR 0013).
+Accounts: every row of a Job Seeker's data belongs to one.
 A self-hosted install has exactly one account.
 
 ## Entry points

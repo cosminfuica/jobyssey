@@ -6,7 +6,6 @@ The map for coding agents. The closest `AGENTS.md` or `README.md` to the file yo
 
 - `ARCHITECTURE.md`: where each kind of file goes and which check enforces each rule.
 - `GLOSSARY.md`: the project's words; use them in names, issues and tests.
-- The ADRs in `docs/adr/` for the area you touch.
 - The closest `README.md` or `AGENTS.md` (`apps/api/AGENTS.md`, `apps/web/AGENTS.md`, `packages/README.md`, each package's `README.md`).
 
 ## Commands
@@ -54,7 +53,7 @@ Scratch files go to `.omo/session-work/` and evidence to `.omo/evidence/` (both 
 
 ## Domain docs
 
-`docs/agents/domain.md`: how to use `GLOSSARY.md` and the ADRs.
+`docs/agents/domain.md`: how to use `GLOSSARY.md`.
 
 ## Harness notes
 

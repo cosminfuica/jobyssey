@@ -401,7 +401,7 @@ const cases: [id: string, mutate: (root: string) => void, expected: Problem][] =
       {
         path: "packages/alpha/schema.ts",
         message:
-          'table "alpha_notes" has no account_id column; per-account tables need account_id NOT NULL REFERENCES accounts(id) (ADR 0013), or list the table in SHARED_TABLES (packages/db) and "sharedTables" in workspace-policy.json',
+          'table "alpha_notes" has no account_id column; per-account tables need account_id NOT NULL REFERENCES accounts(id), or list the table in SHARED_TABLES (packages/db) and "sharedTables" in workspace-policy.json',
       },
     ],
     [
@@ -422,7 +422,7 @@ const cases: [id: string, mutate: (root: string) => void, expected: Problem][] =
         ),
       {
         path: "packages/alpha/schema.ts",
-        message: 'table "alpha_notes": account_id must be NOT NULL (ADR 0013)',
+        message: 'table "alpha_notes": account_id must be NOT NULL',
       },
     ],
     [
@@ -443,7 +443,7 @@ const cases: [id: string, mutate: (root: string) => void, expected: Problem][] =
       {
         path: "packages/alpha/schema.ts",
         message:
-          'table "alpha_notes": account_id needs a foreign key to accounts(id) (ADR 0013)',
+          'table "alpha_notes": account_id needs a foreign key to accounts(id)',
       },
     ],
     [

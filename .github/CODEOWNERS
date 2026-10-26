@@ -13,6 +13,5 @@
 /workspace-policy.json @cosminfuica
 /pnpm-workspace.yaml @cosminfuica
 /packages/db/ @cosminfuica
-/docs/adr/ @cosminfuica
 /LICENSE @cosminfuica
 /.github/CLA.md @cosminfuica

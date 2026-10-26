@@ -4,7 +4,7 @@ Migrations live in `packages/db/migrations` (SQL files plus Drizzle's `meta/` fo
 
 ## Add a table
 
-1. Declare the table in your feature's `schema.ts` (a table that holds account data needs `account_id`, see ADR 0013).
+1. Declare the table in your feature's `schema.ts` (a table that holds account data needs `account_id`).
 2. Run `pnpm db:generate`.
 3. Commit the new `.sql` file, the new `meta/NNNN_snapshot.json` and the changed `meta/_journal.json` together with the `schema.ts` change.
 

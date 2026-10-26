@@ -3,7 +3,7 @@
 ## Purpose
 
 The frame every Jobyssey web app renders: the header, the providers and a
-router built from a list of features (public ADR 0003, 0005).
+router built from a list of features.
 
 ## Entry points
 
