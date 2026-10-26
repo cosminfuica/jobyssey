@@ -2,7 +2,7 @@
 
 The repository commands behind the root `package.json` scripts. Node runs
 them directly (`node scripts/<name>.ts`). This folder is not a workspace
-package: check-workspace and dependency-cruiser never see it, while ESLint,
+package: check-workspace and dependency-cruiser never see it, while oxlint,
 the root `tsconfig.json`, ls-lint and knip do. `pnpm test:root` runs its
 tests; `pnpm test` does not.
 
@@ -44,8 +44,8 @@ a recorded pull request.
   the copy (`docs/guides/add-a-feature.md` lists the renamed forms).
 - CI's `gen-feature` job fails unless `pnpm gen:feature` changes only the
   three `packages/registry` files, the new package and `pnpm-lock.yaml`.
-- CW17's exemptions change together with the `no-restricted-syntax`
-  exemptions in `eslint.config.js`.
+- CW17's exemptions change together with the `no-restricted-properties`
+  exemptions in `oxlint.config.ts`.
 - An edit to `.github/pull_request_template.md` also needs `REQUIRED_SECTIONS`
   and `PROMPT` in `lib/pr-gate.ts` checked, and the `template-untouched`
   fixture in `tests/fixtures/pr-gate/` updated: `lib/pr-gate.test.ts` requires

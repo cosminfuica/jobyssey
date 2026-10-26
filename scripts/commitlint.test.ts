@@ -24,7 +24,7 @@ function lint(
 
 const cases: [message: string, ok: boolean][] = [
   ["feat(repo): add migit lock", true],
-  ["feat(eslint-config): tighten rules", true],
+  ["feat(oxlint-config): tighten rules", true],
   ["feat: add migration sets", false],
   ["fix(sytem): typo", false],
   ["feat(nope): x", false],

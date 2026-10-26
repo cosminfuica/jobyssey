@@ -9,11 +9,6 @@
   minimumReleaseAge: "1 day",
   packageRules: [
     {
-      // typescript-eslint's peer range.
-      matchPackageNames: ["typescript"],
-      allowedVersions: "<6.1",
-    },
-    {
       matchPackageNames: ["drizzle-orm", "drizzle-kit", "@electric-sql/pglite"],
       rangeStrategy: "pin",
     },

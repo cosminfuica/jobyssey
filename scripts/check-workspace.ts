@@ -6,7 +6,7 @@ import { basename, dirname, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { is } from "drizzle-orm";
 import { getTableConfig, PgTable } from "drizzle-orm/pg-core";
-import ts from "typescript";
+import { API } from "typescript/sync";
 import {
   FIXED_SCOPES,
   listWorkspaceDirs,
@@ -69,7 +69,7 @@ const TSCONFIG_BASES = [
   "@jobyssey/typescript-config/web.json",
 ];
 
-const SCRIPTS = { typecheck: "tsc -p .", lint: "eslint . --max-warnings 0" };
+const SCRIPTS = { typecheck: "tsc -p .", lint: "oxlint . --max-warnings 0" };
 
 const LEFTOVERS = new Set(["node_modules", ".turbo", "dist", ".gitkeep"]);
 const SKIP_DIRS = new Set(["node_modules", ".turbo", "dist"]);
@@ -179,6 +179,20 @@ function importsSpecifier(file: string, specifier: string): boolean {
 export async function checkWorkspace(
   root: string,
   policy = readPolicy(root)
+): Promise<Problem[]> {
+  // TypeScript 7's API runs the compiler in a child process: one per run, closed on every path.
+  const api = new API({ cwd: root });
+  try {
+    return await checkPackages(root, policy, api);
+  } finally {
+    api.close();
+  }
+}
+
+async function checkPackages(
+  root: string,
+  policy: Policy,
+  api: API
 ): Promise<Problem[]> {
   const problems: Problem[] = [];
   const add = (path: string, message: string) =>
@@ -343,16 +357,13 @@ export async function checkWorkspace(
       add(dir, "missing tsconfig.json");
     } else {
       const tsconfigPath = `${dir}/tsconfig.json`;
-      const { error, ...parsed } = ts.readConfigFile(
-        join(abs, "tsconfig.json"),
-        (path) => ts.sys.readFile(path)
+      // readConfigFile returns the file's own JSON (comments allowed), not the merged config.
+      const { error, ...parsed } = api.readConfigFile(
+        join(abs, "tsconfig.json")
       );
       const config = parsed.config as Record<string, unknown> | undefined;
       if (error || config === undefined) {
-        add(
-          tsconfigPath,
-          `cannot be parsed: ${ts.flattenDiagnosticMessageText(error?.messageText ?? "empty", " ")}`
-        );
+        add(tsconfigPath, `cannot be parsed: ${error?.text ?? "empty"}`);
       } else {
         if (!TSCONFIG_BASES.includes(config.extends as string))
           add(
@@ -433,7 +444,7 @@ export async function checkWorkspace(
     }
 
     // CW17 process.env readers. Exempt: policy.envReaders, files inside a tests/ folder (not *.test.ts elsewhere), *.config.{ts,js}; tooling is skipped above, scripts/ is not a workspace.
-    // Keep in step with the ESLint no-restricted-syntax exemptions in eslint.config.js (`**/tests/**/*.{ts,tsx}`).
+    // Keep in step with the oxlint no-restricted-properties exemptions in oxlint.config.ts (`**/tests/**/*.{ts,tsx}`).
     // False positive: a string literal such as "set process.env.X" in an error text, or a colocated lib/*.test.ts that reads the environment (move it to tests/); reword or move it.
     for (const file of files) {
       if (

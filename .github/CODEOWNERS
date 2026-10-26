@@ -6,7 +6,7 @@
 /scripts/ @cosminfuica
 /tooling/ @cosminfuica
 /.dependency-cruiser.cjs @cosminfuica
-/eslint.config.js @cosminfuica
+/oxlint.config.ts @cosminfuica
 /commitlint*.config.ts @cosminfuica
 /knip.jsonc @cosminfuica
 /.ls-lint.yml @cosminfuica

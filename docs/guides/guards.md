@@ -51,9 +51,9 @@ Catches unused files, exports and dependencies, including exports from entry fil
 
 Catches migrations out of order and destructive SQL without the `-- expand-contract: ok` marker; see `migrations.md`.
 
-## TypeScript and ESLint
+## TypeScript and oxlint
 
-`pnpm typecheck` and `typecheck:root` run `tsc` with the shared base: `erasableSyntaxOnly` rejects enums, namespaces and parameter properties, `verbatimModuleSyntax` requires `import type` for types, and `NodeNext` rejects extensionless relative imports (TS2835). A relative import ending in `.js` type-checks and passes every guard; it fails only when Node loads the file (`ERR_MODULE_NOT_FOUND`), which `pnpm smoke` and `pnpm start` exercise. `pnpm lint` and `lint:root` run ESLint with `--max-warnings 0`; `no-restricted-syntax` rejects `process.env` outside the composition roots, scripts, config files and tests.
+`pnpm typecheck` and `typecheck:root` run `tsc` with the shared base: `erasableSyntaxOnly` rejects enums, namespaces and parameter properties, `verbatimModuleSyntax` requires `import type` for types, and `NodeNext` rejects extensionless relative imports (TS2835). A relative import ending in `.js` type-checks and passes every guard; it fails only when Node loads the file (`ERR_MODULE_NOT_FOUND`), which `pnpm smoke` and `pnpm start` exercise. `pnpm lint` and `lint:root` run oxlint with type-aware rules (tsgolint) and `--max-warnings 0`; `eslint/no-restricted-properties` rejects `process.env` (also `process["env"]` and `const { env } = process`) outside the composition roots, scripts, config files, config packages and tests. `oxlint-tsgolint` 7.0.x embeds TypeScript 7.0, so tsconfig files avoid 7.1-only options until `oxlint-tsgolint` moves to 7.1.x: `pnpm lint` and `lint:root` fail with `typescript(tsconfig-error)` on an `es2026` target or lib, and nothing checks `contentMappers` for tsgolint yet (`tsc` rejects it today only because no script passes `--runExternalCode`).
 
 ## commitlint and the PR gate
 

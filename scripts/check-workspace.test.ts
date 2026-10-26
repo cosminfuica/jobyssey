@@ -46,7 +46,7 @@ function editJson(
   put(root, file, json);
 }
 
-const scripts = { typecheck: "tsc -p .", lint: "eslint . --max-warnings 0" };
+const scripts = { typecheck: "tsc -p .", lint: "oxlint . --max-warnings 0" };
 const tsconfig = `{
   // comments are allowed: CW09 parses with typescript's readConfigFile
   "extends": "@jobyssey/typescript-config/base.json",
@@ -275,12 +275,12 @@ const cases: [id: string, mutate: (root: string) => void, expected: Problem][] =
       "CW07",
       (root) =>
         editJson(root, "packages/alpha/package.json", (pkg) => {
-          (pkg.scripts as Record<string, string>).lint = "eslint .";
+          (pkg.scripts as Record<string, string>).lint = "oxlint .";
         }),
       {
         path: "packages/alpha/package.json",
         message:
-          'scripts.lint must be "eslint . --max-warnings 0", got "eslint ."',
+          'scripts.lint must be "oxlint . --max-warnings 0", got "oxlint ."',
       },
     ],
     [
@@ -496,6 +496,23 @@ test.for(cases)(
     const root = buildFixture();
     mutate(root);
     expect(await checkWorkspace(root)).toEqual([expected]);
+  }
+);
+
+// Not in the table: the broken tsconfig also breaks the schema.ts import (another problem).
+test(
+  "CW09 reports a tsconfig it cannot parse",
+  { timeout: TIMEOUT },
+  async () => {
+    const root = buildFixture();
+    put(root, "packages/alpha/tsconfig.json", '{ "extends": \n');
+    const problem = (await checkWorkspace(root)).find(
+      (p) => p.path === "packages/alpha/tsconfig.json"
+    );
+    // TypeScript's own wording can change between releases; require its text, not a code or the fallback.
+    expect(problem?.message).toMatch(
+      /^cannot be parsed: (?!empty$|(?:TS)?\d+$)\S/
+    );
   }
 );
 

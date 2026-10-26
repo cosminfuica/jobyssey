@@ -28,7 +28,7 @@ Everything else. `packages/README.md` describes the anatomy. There are four kind
 
 ### `tooling/`
 
-Config packages with no runtime code: `typescript-config` (`base.json`, `web.json`), `eslint-config` (`index.js`) and `vitest-config` (`index.ts`, `createVitestConfig()`). They import nothing from `apps/` or `packages/`.
+Config packages with no runtime code: `typescript-config` (`base.json`, `web.json`), `oxlint-config` (`index.ts`) and `vitest-config` (`index.ts`, `createVitestConfig()`). They import nothing from `apps/` or `packages/`.
 
 ### `scripts/`
 
@@ -44,9 +44,9 @@ Root-level tests, run by `pnpm test:root`: `tests/boundaries/` (one fixture tree
 
 ### Root files
 
-`package.json` (scripts), `pnpm-workspace.yaml` (workspace globs, the version catalog), `turbo.json` (task graph), `workspace-policy.json`, `.dependency-cruiser.cjs` and `dependency-cruiser.rules.cjs`, `.ls-lint.yml`, `knip.jsonc`, `eslint.config.js`, `commitlint.config.ts` and `commitlint.pr.config.ts`, `vitest.config.ts`, `tsconfig.json` (root scripts and tests), `tsconfig.depcruise.json`, `.husky/` (git hooks), `.github/` (workflows, templates, CODEOWNERS, Renovate, release-please config and manifest, and the community files `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md`, `CLA.md`), `GLOSSARY.md`. `docs/PRODUCT.md` is the product context for design tools.
+`package.json` (scripts), `pnpm-workspace.yaml` (workspace globs, the version catalog), `turbo.json` (task graph), `workspace-policy.json`, `.dependency-cruiser.cjs` and `dependency-cruiser.rules.cjs`, `.ls-lint.yml`, `knip.jsonc`, `oxlint.config.ts`, `commitlint.config.ts` and `commitlint.pr.config.ts`, `vitest.config.ts`, `tsconfig.json` (root scripts and tests), `tsconfig.depcruise.json`, `.husky/` (git hooks), `.github/` (workflows, templates, CODEOWNERS, Renovate, release-please config and manifest, and the community files `CODE_OF_CONDUCT.md`, `SECURITY.md`, `SUPPORT.md`, `CLA.md`), `GLOSSARY.md`. `docs/PRODUCT.md` is the product context for design tools.
 
-A file stays at the root only when a tool or reader looks for it there: the configs above, `README.md`, `LICENSE`, `CONTRIBUTING.md`, `AGENTS.md`, `ARCHITECTURE.md` and `GLOSSARY.md`. A workspace that nests this repository at `core/` loads `dependency-cruiser.rules.cjs`, `commitlint.config.ts` and `eslint.config.js` by path, so they stay at the root too.
+A file stays at the root only when a tool or reader looks for it there: the configs above, `README.md`, `LICENSE`, `CONTRIBUTING.md`, `AGENTS.md`, `ARCHITECTURE.md` and `GLOSSARY.md`. A workspace that nests this repository at `core/` loads `dependency-cruiser.rules.cjs` and `commitlint.config.ts` by path, and oxlint finds `oxlint.config.ts` by walking up from each package, so they stay at the root too.
 
 ## Where does X go
 
@@ -97,7 +97,7 @@ Each rule below fails a named check; `pnpm check` runs all of them, and CI runs 
 | A feature has tests and is registered in the registry                                | CW12, CW13                                                                                                                                                                                       |
 | Every per-account table has `account_id NOT NULL REFERENCES accounts(id)`            | CW16, and `findUnscopedTables` in `packages/db/tests/account-scope.integration.test.ts`                                                                                                          |
 | Tables live only in a package's `schema.ts`, covered by the Drizzle config           | CW15                                                                                                                                                                                             |
-| Only `workspace-policy.json` `envReaders` read `process.env`                         | CW17, and ESLint `no-restricted-syntax`                                                                                                                                                          |
+| Only `workspace-policy.json` `envReaders` read `process.env`                         | CW17, and oxlint `eslint/no-restricted-properties`                                                                                                                                               |
 | Kebab-case folder names, a README per package, no folder named like a fixed scope    | CW14, CW18, `.ls-lint.yml`                                                                                                                                                                       |
 | One version per dependency across the workspace                                      | sherif (`pnpm lint:deps`), `catalogMode: strict` in `pnpm-workspace.yaml`                                                                                                                        |
 | No unused files, exports or dependencies                                             | `knip.jsonc` (`pnpm lint:unused`)                                                                                                                                                                |

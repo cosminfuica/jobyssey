@@ -217,7 +217,9 @@ describe.runIf(process.env.TEST_DB === "postgres")("Postgres", () => {
             migrateDatabase(handle, { sets: [v2, extra] })
           )
         );
-        expect(results.map((r) => r.applied).sort()).toEqual([0, 3]);
+        expect(results.map((r) => r.applied).sort((x, y) => x - y)).toEqual([
+          0, 3,
+        ]);
         expect(await count(a.db, "__drizzle_migrations")).toBe(2);
         expect(await count(a.db, "__drizzle_migrations_extra")).toBe(1);
       } finally {

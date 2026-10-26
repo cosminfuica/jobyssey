@@ -25,7 +25,7 @@ packages/system/       the reference feature, copied by pnpm gen:feature
 packages/registry/     the feature list both apps load; gen:feature edits it
 packages/ui/           shadcn kit from pnpm ui:add; the only package with src/
 packages/<platform>/   db, accounts, auth, api-shell, web-shell (and ui)
-tooling/               shared TypeScript, ESLint and Vitest config packages
+tooling/               shared TypeScript, oxlint and Vitest config packages
 scripts/               guards, generators, smoke test, PR gate; not a package
 tests/                 root tests: boundary fixtures, migration and PR fixtures
 workspace-policy.json  the lists check-workspace and dependency-cruiser read
@@ -88,7 +88,7 @@ Refs: other files that use the symbol.
 - Platform packages never import features: `platform-never-imports-features`. Apps get features from `packages/registry` by convention (no check enforces it yet); CW13 fails when a feature is not registered there.
 - Every per-account table has `account_id NOT NULL REFERENCES accounts(id)`: `check-workspace` CW16 and the `findUnscopedTables` test.
 - Package anatomy (manifest, exports, tsconfig, layout, tests, registration, README): `check-workspace` CW01-CW18 (`pnpm check:workspace`).
-- In apps and packages, only `apps/api/src/main.ts` and `dev.ts` read `process.env` (files under `tests/` and `*.config.ts` files are exempt): CW17 and ESLint `no-restricted-syntax`.
+- In apps and packages, only `apps/api/src/main.ts` and `dev.ts` read `process.env` (files under `tests/` and `*.config.ts` files are exempt): CW17 and oxlint `eslint/no-restricted-properties`.
 - Versions live in the catalog of `pnpm-workspace.yaml`: CW08 and sherif.
 - No unused exports or dependencies: knip (`pnpm lint:unused`).
 - File and folder names: ls-lint (`pnpm lint:files`).
@@ -100,7 +100,7 @@ Refs: other files that use the symbol.
 
 - Relative imports end in `.ts` or `.tsx`. A `.js` extension type-checks and fails only when Node loads the file, which `pnpm smoke` and `pnpm start` exercise.
 - Node never loads a `.tsx` file: browser-only code, `lib/` helpers included, goes in `.tsx` (`node-code-no-tsx-or-react`).
-- Type-only imports use `import type` (ESLint `consistent-type-imports`).
+- Type-only imports use `import type` (oxlint `typescript/consistent-type-imports`).
 - HTTP errors are `application/problem+json` responses from `problem()`. Code logs through the pino `Logger`; only `scripts/` call `console`.
 - Database tests are `*.integration.test.ts(x)`: they run on PGlite, and again on Postgres when `TEST_DATABASE_URL` is set. Tests wait for events with bounded timeouts, never fixed sleeps (`docs/guides/testing.md`).
 - Known limits are marked with a `shortcut:` comment.
