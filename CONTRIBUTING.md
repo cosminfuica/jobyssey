@@ -27,7 +27,8 @@ The development commands use Turborepo, which collects anonymous usage data. Swi
 - New features start from `pnpm gen:feature <name>`, which creates and registers the package (see [docs/guides/add-a-feature.md](docs/guides/add-a-feature.md)).
 - Tests live in each package's `tests/` folder and import the package through its entry points, never its internal files (see [docs/guides/testing.md](docs/guides/testing.md)).
 - Schema changes get a migration from `pnpm db:generate`. Never edit a migration that has been applied. A destructive change is split into expand and contract migrations, and only the contract migration carries the `-- expand-contract: ok` marker (see [docs/guides/migrations.md](docs/guides/migrations.md)).
-- Prettier, ESLint and the workspace guards enforce the code style. Run `pnpm check`; [docs/guides/guards.md](docs/guides/guards.md) explains each message.
+- Prettier, oxlint and the workspace guards enforce the code style. Run `pnpm check`; [docs/guides/guards.md](docs/guides/guards.md) explains each message.
+- In VS Code, lint errors show through the oxc extension (`oxc.oxc-vscode`), and TypeScript 7 errors through the "TypeScript 7" extension (`TypeScriptTeam.native-preview`) once you turn it on with the `TypeScript: Enable TypeScript 7` command or the `js/ts.experimental.useTsgo` setting.
 - Dependency licences: permissive licences (MIT, BSD, ISC, Apache-2.0) and MPL-2.0 are fine. AGPL, SSPL and GPL are not allowed in runtime dependencies.
 
 ## Commits

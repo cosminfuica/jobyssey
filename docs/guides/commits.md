@@ -13,7 +13,7 @@ Closes: #12
 ```
 
 - **type**: one of `feat`, `fix`, `perf`, `refactor`, `test`, `docs`, `build`, `ci`, `chore`, `revert`.
-- **scope**: required. Either a workspace folder name (the last segment of each folder matched by `pnpm-workspace.yaml` that has a `package.json`, for example `eslint-config`) or one of the fixed scopes `repo`, `deps`, `docs`, `github`, `release`. The list is derived from the tree, so a new package becomes a scope as soon as it exists.
+- **scope**: required. Either a workspace folder name (the last segment of each folder matched by `pnpm-workspace.yaml` that has a `package.json`, for example `oxlint-config`) or one of the fixed scopes `repo`, `deps`, `docs`, `github`, `release`. The list is derived from the tree, so a new package becomes a scope as soon as it exists.
 - **subject**: imperative mood, lower-case, no trailing period. The whole header is at most 72 characters.
 - **body**: the why, not the what; the diff already shows the what. Separate it from the header with a blank line.
 

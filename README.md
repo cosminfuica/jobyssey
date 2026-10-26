@@ -53,7 +53,7 @@ packages/
   ui/           UI components
   registry/     the list of features both apps load
   system/       system status feature
-tooling/        shared TypeScript, ESLint and Vitest config
+tooling/        shared TypeScript, oxlint and Vitest config
 scripts/        workspace checks, generators and repo tools
 docs/           guides and agent notes
 ```

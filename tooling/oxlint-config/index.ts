@@ -129,7 +129,7 @@ export const rules = {
         "Read settings through loadConfig; only apps/*/src/main.ts and dev.ts read process.env.",
     },
   ],
-  // typescript-eslint turns these off for TypeScript files because tsc reports them; the correctness category would turn some back on.
+  // typescript-eslint turns these off for TypeScript files, because tsc reports them or a typed typescript/ rule replaces them; the correctness category would turn some back on.
   "eslint/constructor-super": "off",
   "eslint/getter-return": "off",
   "eslint/no-class-assign": "off",
