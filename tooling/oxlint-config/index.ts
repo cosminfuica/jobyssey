@@ -39,6 +39,7 @@ export const rules = {
   "typescript/no-unsafe-return": "error",
   "typescript/no-unsafe-unary-minus": "error",
   "eslint/no-unused-expressions": "error",
+  // The options on no-unused-vars, no-constant-binary-expression and no-irregular-whitespace copy ESLint's effective ones; oxlint's defaults are looser for some of them.
   "eslint/no-unused-vars": [
     "error",
     {
