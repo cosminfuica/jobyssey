@@ -510,7 +510,9 @@ test(
       (p) => p.path === "packages/alpha/tsconfig.json"
     );
     // TypeScript's own wording can change between releases; require its text, not a code or the fallback.
-    expect(problem?.message).toMatch(/^cannot be parsed: (?!empty$)[A-Za-z]/);
+    expect(problem?.message).toMatch(
+      /^cannot be parsed: (?!empty$|(?:TS)?\d+$)\S/
+    );
   }
 );
 
