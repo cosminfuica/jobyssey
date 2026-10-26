@@ -13,8 +13,8 @@
       "dependsOn": ["transit"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        "$TURBO_ROOT$/eslint.config.js",
-        "$TURBO_ROOT$/tooling/eslint-config/**",
+        "$TURBO_ROOT$/oxlint.config.ts",
+        "$TURBO_ROOT$/tooling/oxlint-config/**",
         "$TURBO_ROOT$/tooling/typescript-config/**"
       ]
     },

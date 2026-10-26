@@ -69,7 +69,7 @@ const TSCONFIG_BASES = [
   "@jobyssey/typescript-config/web.json",
 ];
 
-const SCRIPTS = { typecheck: "tsc -p .", lint: "eslint . --max-warnings 0" };
+const SCRIPTS = { typecheck: "tsc -p .", lint: "oxlint . --max-warnings 0" };
 
 const LEFTOVERS = new Set(["node_modules", ".turbo", "dist", ".gitkeep"]);
 const SKIP_DIRS = new Set(["node_modules", ".turbo", "dist"]);
@@ -433,7 +433,7 @@ export async function checkWorkspace(
     }
 
     // CW17 process.env readers. Exempt: policy.envReaders, files inside a tests/ folder (not *.test.ts elsewhere), *.config.{ts,js}; tooling is skipped above, scripts/ is not a workspace.
-    // Keep in step with the ESLint no-restricted-syntax exemptions in eslint.config.js (`**/tests/**/*.{ts,tsx}`).
+    // Keep in step with the oxlint no-restricted-properties exemptions in oxlint.config.ts (`**/tests/**/*.{ts,tsx}`).
     // False positive: a string literal such as "set process.env.X" in an error text, or a colocated lib/*.test.ts that reads the environment (move it to tests/); reword or move it.
     for (const file of files) {
       if (

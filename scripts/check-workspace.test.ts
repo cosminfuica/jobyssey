@@ -46,7 +46,7 @@ function editJson(
   put(root, file, json);
 }
 
-const scripts = { typecheck: "tsc -p .", lint: "eslint . --max-warnings 0" };
+const scripts = { typecheck: "tsc -p .", lint: "oxlint . --max-warnings 0" };
 const tsconfig = `{
   // comments are allowed: CW09 parses with typescript's readConfigFile
   "extends": "@jobyssey/typescript-config/base.json",
@@ -275,12 +275,12 @@ const cases: [id: string, mutate: (root: string) => void, expected: Problem][] =
       "CW07",
       (root) =>
         editJson(root, "packages/alpha/package.json", (pkg) => {
-          (pkg.scripts as Record<string, string>).lint = "eslint .";
+          (pkg.scripts as Record<string, string>).lint = "oxlint .";
         }),
       {
         path: "packages/alpha/package.json",
         message:
-          'scripts.lint must be "eslint . --max-warnings 0", got "eslint ."',
+          'scripts.lint must be "oxlint . --max-warnings 0", got "oxlint ."',
       },
     ],
     [

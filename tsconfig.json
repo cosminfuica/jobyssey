@@ -4,8 +4,7 @@
     "scripts/**/*.ts",
     "tests/**/*.ts",
     "tooling/**/*.ts",
-    "*.config.ts",
-    "eslint.config.js"
+    "*.config.ts"
   ],
   "exclude": ["tests/**/fixtures/**"],
   "compilerOptions": {

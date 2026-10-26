@@ -45,8 +45,8 @@ beforeEach(() => {
     filter: (path) =>
       !["node_modules", ".turbo", "dist"].includes(basename(path)),
   });
-  mkdirSync(join(root, "tooling/eslint-config"), { recursive: true });
-  writeFileSync(join(root, "tooling/eslint-config/package.json"), "{}\n");
+  mkdirSync(join(root, "tooling/oxlint-config"), { recursive: true });
+  writeFileSync(join(root, "tooling/oxlint-config/package.json"), "{}\n");
 });
 
 afterEach(() => {
@@ -99,8 +99,8 @@ test("validateFeatureName rejects bad, reserved and taken names", () => {
   expect(validateFeatureName(root, "notes")).toBe(
     "packages/notes already exists"
   );
-  expect(validateFeatureName(root, "eslint-config")).toBe(
-    '"eslint-config" is already a workspace folder (tooling/eslint-config); folder names are unique across apps/, packages/ and tooling/ because they are package names and commit scopes'
+  expect(validateFeatureName(root, "oxlint-config")).toBe(
+    '"oxlint-config" is already a workspace folder (tooling/oxlint-config); folder names are unique across apps/, packages/ and tooling/ because they are package names and commit scopes'
   );
   expect(validateFeatureName(root, "job-search")).toBeUndefined();
 });

@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "typecheck": "tsc -p .",
-    "lint": "eslint . --max-warnings 0"
+    "lint": "oxlint . --max-warnings 0"
   },
   "dependencies": {
     "@jobyssey/registry": "workspace:*",
