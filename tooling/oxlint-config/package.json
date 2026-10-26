@@ -1,0 +1,11 @@
+{
+  "name": "@jobyssey/oxlint-config",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "peerDependencies": {
+    "oxlint": "catalog:"
+  }
+}
