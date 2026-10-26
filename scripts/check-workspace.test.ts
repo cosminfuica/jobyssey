@@ -506,10 +506,11 @@ test(
   async () => {
     const root = buildFixture();
     put(root, "packages/alpha/tsconfig.json", '{ "extends": \n');
-    expect(await checkWorkspace(root)).toContainEqual({
-      path: "packages/alpha/tsconfig.json",
-      message: "cannot be parsed: Expression expected.",
-    });
+    const problem = (await checkWorkspace(root)).find(
+      (p) => p.path === "packages/alpha/tsconfig.json"
+    );
+    // TypeScript's own wording can change between releases; require its text, not a code or the fallback.
+    expect(problem?.message).toMatch(/^cannot be parsed: (?!empty$)[A-Za-z]/);
   }
 );
 
