@@ -16,7 +16,13 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import ts from "typescript";
+import { SyntaxKind } from "typescript/ast";
+import {
+  isExportDeclaration,
+  isImportDeclaration,
+  isStringLiteral,
+} from "typescript/ast/is";
+import { API, ScriptKind } from "typescript/sync";
 import { parseDocument, Scalar } from "yaml";
 
 const SHADCN = "shadcn@4.22.1";
@@ -79,22 +85,30 @@ export function importedPackages(file: string, content: string): string[] {
     for (const match of content.matchAll(/^\s*@import\s+["']([^"']+)["']/gm))
       if (match[1] !== undefined) specifiers.push(match[1]);
   } else {
-    const source = ts.createSourceFile(
-      file,
-      content,
-      ts.ScriptTarget.Latest,
-      false,
-      file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS
-    );
-    for (const statement of source.statements) {
-      const runtime =
-        (ts.isImportDeclaration(statement) &&
-          statement.importClause?.isTypeOnly !== true) ||
-        (ts.isExportDeclaration(statement) && !statement.isTypeOnly);
-      const specifier = (statement as { moduleSpecifier?: ts.Expression })
-        .moduleSpecifier;
-      if (runtime && specifier !== undefined && ts.isStringLiteral(specifier))
-        specifiers.push(specifier.text);
+    // TypeScript 7's API runs the compiler in a child process; the parsed
+    // file is a lease on it. Both are released on every path.
+    const api = new API();
+    try {
+      const retained = api.createSourceFile(file, content, {
+        scriptKind: file.endsWith(".tsx") ? ScriptKind.TSX : ScriptKind.TS,
+      });
+      try {
+        for (const statement of retained.sourceFile.statements) {
+          const specifier =
+            (isImportDeclaration(statement) &&
+              statement.importClause?.phaseModifier !==
+                SyntaxKind.TypeKeyword) ||
+            (isExportDeclaration(statement) && !statement.isTypeOnly)
+              ? statement.moduleSpecifier
+              : undefined;
+          if (specifier !== undefined && isStringLiteral(specifier))
+            specifiers.push(specifier.text);
+        }
+      } finally {
+        retained.dispose();
+      }
+    } finally {
+      api.close();
     }
   }
   const names = specifiers.map(packageName);

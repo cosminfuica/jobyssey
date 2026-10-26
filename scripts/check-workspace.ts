@@ -6,7 +6,7 @@ import { basename, dirname, join, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { is } from "drizzle-orm";
 import { getTableConfig, PgTable } from "drizzle-orm/pg-core";
-import ts from "typescript";
+import { API } from "typescript/sync";
 import {
   FIXED_SCOPES,
   listWorkspaceDirs,
@@ -180,6 +180,20 @@ export async function checkWorkspace(
   root: string,
   policy = readPolicy(root)
 ): Promise<Problem[]> {
+  // TypeScript 7's API runs the compiler in a child process: one per run, closed on every path.
+  const api = new API({ cwd: root });
+  try {
+    return await checkPackages(root, policy, api);
+  } finally {
+    api.close();
+  }
+}
+
+async function checkPackages(
+  root: string,
+  policy: Policy,
+  api: API
+): Promise<Problem[]> {
   const problems: Problem[] = [];
   const add = (path: string, message: string) =>
     problems.push({ path, message });
@@ -343,16 +357,13 @@ export async function checkWorkspace(
       add(dir, "missing tsconfig.json");
     } else {
       const tsconfigPath = `${dir}/tsconfig.json`;
-      const { error, ...parsed } = ts.readConfigFile(
-        join(abs, "tsconfig.json"),
-        (path) => ts.sys.readFile(path)
+      // readConfigFile returns the file's own JSON (comments allowed), not the merged config.
+      const { error, ...parsed } = api.readConfigFile(
+        join(abs, "tsconfig.json")
       );
       const config = parsed.config as Record<string, unknown> | undefined;
       if (error || config === undefined) {
-        add(
-          tsconfigPath,
-          `cannot be parsed: ${ts.flattenDiagnosticMessageText(error?.messageText ?? "empty", " ")}`
-        );
+        add(tsconfigPath, `cannot be parsed: ${error?.text ?? "empty"}`);
       } else {
         if (!TSCONFIG_BASES.includes(config.extends as string))
           add(

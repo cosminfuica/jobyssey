@@ -499,6 +499,20 @@ test.for(cases)(
   }
 );
 
+// Not in the table: the broken tsconfig also breaks the schema.ts import (another problem).
+test(
+  "CW09 reports a tsconfig it cannot parse",
+  { timeout: TIMEOUT },
+  async () => {
+    const root = buildFixture();
+    put(root, "packages/alpha/tsconfig.json", '{ "extends": \n');
+    expect(await checkWorkspace(root)).toContainEqual({
+      path: "packages/alpha/tsconfig.json",
+      message: "cannot be parsed: Expression expected.",
+    });
+  }
+);
+
 test("the real repository has no problems", { timeout: TIMEOUT }, async () => {
   expect(await checkWorkspace(repo)).toEqual([]);
 });

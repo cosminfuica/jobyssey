@@ -10,13 +10,13 @@ allowBuilds:
   esbuild: true
 
 catalog:
-  typescript: "~6.0.3"
+  typescript: "7.1.0-beta"
   turbo: "^2.11.10"
   "@types/node": "^26.6.5"
   prettier: "^3.9.10"
   husky: "^9.1.7"
   lint-staged: "^17.6.0"
-  dependency-cruiser: "^18.7.0"
+  dependency-cruiser: "18.8.0-beta-1"
   oxlint: "^1.89.0"
   oxlint-tsgolint: "^7.0.2005"
   vitest: "5.1.0-beta.1"
